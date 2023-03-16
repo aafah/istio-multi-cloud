@@ -1,5 +1,5 @@
 async function fetchItems(){
-    const response = await fetch("http://localhost:3003/items", {
+    const response = await fetch("/items", {
         headers: {
             "Content-type": "application/json"
         }
@@ -14,7 +14,7 @@ async function fetchItems(){
 }
 
 async function createItem(item) {
-    const response = await fetch("http://localhost:3003/items", {
+    const response = await fetch("/items", {
         method: 'POST',
         body: JSON.stringify(item),
         headers: {
@@ -25,7 +25,7 @@ async function createItem(item) {
 }
 
 async function createRev(rev) {
-    const response = await fetch(`http://localhost:3002/reviews/${rev.id_item}`, {
+    const response = await fetch(`/reviews/${rev.id_item}`, {
         method: 'POST',
         body: JSON.stringify(rev),
         headers: {
@@ -36,7 +36,7 @@ async function createRev(rev) {
 }
 
 async function fetchRevs(id){
-    const response = await fetch(`http://localhost:3002/reviews/${id}`, {
+    const response = await fetch(`/reviews/${id}`, {
         headers: {
             "Content-type": "application/json"
         }
@@ -51,13 +51,13 @@ async function fetchRevs(id){
 }
 
 async function deleteItem(id) {
-    const response = await fetch(`http://localhost:3003/items/${id}`, {
+    const response = await fetch(`/items/${id}`, {
         method: 'DELETE'
     })
     if (!response.ok) throw new Error(response.status)
 }
 
-/*
+/* http://localhost:3003
 async function deleteRev(id) {
     const response = await fetch(`http://localhost:3002/reviews/${id}`, {
         method: 'DELETE'
