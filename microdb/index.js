@@ -6,7 +6,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 
 async function deleteRev(id) {
-    const response = await fetch(`http://localhost:3002/reviews/${id}`, {
+    const response = await fetch(`http://api-two-service:3002/reviews/${id}`, {
         method: 'DELETE'
     })
     if (!response.ok) throw new Error(response.status)

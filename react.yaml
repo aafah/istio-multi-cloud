@@ -1,38 +1,86 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deplo
+  name: api-two-deplo
   labels:
-    app: nginx-d
+    app: api-two
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx-d
+      app: api-two
   template:
     metadata:
       labels:
-        app: nginx-d
+        app: api-two
     spec:
       containers:
-      - name: nginx-d
-        image: nginx-image
+      - name: api-two
+        image: microtwo-image
         imagePullPolicy: Never
         ports:
-        - containerPort: 80
+        - containerPort: 3002
+        volumeMounts:
+        - name: db-data
+          mountPath: /db
+      volumes:
+      - name: db-data
+        hostPath:
+          path: /home/amart/first/microtwo/db
 --- 
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-service
+  name: api-two-service
 spec:
   selector:
-    app: nginx-d
-  type: LoadBalancer  #Accepts external request by assigning the service an IPaddr
+    app: api-two
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 80
+      port: 3002
+      targetPort: 3002
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-db-deplo
+  labels:
+    app: api-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-db
+  template:
+    metadata:
+      labels:
+        app: api-db
+    spec:
+      containers:
+      - name: api-db
+        image: microdb-image
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3003
+        volumeMounts:
+        - name: db-data
+          mountPath: /db
+      volumes:
+      - name: db-data
+        hostPath:
+          path: /home/amart/first/microdb/db
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-db-service
+spec:
+  selector:
+    app: api-db
+  ports:
+    - protocol: TCP
+      port: 3003
+      targetPort: 3003
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -74,69 +122,35 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-db-deplo
+  name: nginx-deplo
   labels:
-    app: api-db
+    app: nginx-d
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api-db
+      app: nginx-d
   template:
     metadata:
       labels:
-        app: api-db
+        app: nginx-d
     spec:
       containers:
-      - name: api-db
-        image: microdb-image
+      - name: nginx-d
+        image: nginx-image
         imagePullPolicy: Never
         ports:
-        - containerPort: 3003
+        - containerPort: 80
 --- 
 apiVersion: v1
 kind: Service
 metadata:
-  name: api-db-service
+  name: nginx-service
 spec:
   selector:
-    app: api-db
+    app: nginx-d
+  type: LoadBalancer  #Accepts external request by assigning the service an IPaddr
   ports:
     - protocol: TCP
-      port: 3003
-      targetPort: 3003
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: api-two-deplo
-  labels:
-    app: api-two
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: api-two
-  template:
-    metadata:
-      labels:
-        app: api-two
-    spec:
-      containers:
-      - name: api-two
-        image: microtwo-image
-        imagePullPolicy: Never
-        ports:
-        - containerPort: 3003
---- 
-apiVersion: v1
-kind: Service
-metadata:
-  name: api-two-service
-spec:
-  selector:
-    app: api-two
-  ports:
-    - protocol: TCP
-      port: 3002
-      targetPort: 3002
+      port: 80
+      targetPort: 80
