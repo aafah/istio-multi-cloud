@@ -1,4 +1,4 @@
-FROM node
+FROM node:alpine
 LABEL project="mockapp"
 WORKDIR /app
 COPY package.json .
