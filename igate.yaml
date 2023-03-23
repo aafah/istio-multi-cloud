@@ -1,0 +1,67 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: micro-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: istio-microvs
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - micro-gateway
+  http:
+  - match:
+    - uri:
+        prefix: "/items"
+    route:
+    - destination:
+        host: api-db-service
+        port:
+          number: 3003
+  - match:
+    - uri:
+        prefix: "/reviews"
+    route:
+    - destination:
+        host: api-two-service
+        port:
+          number: 3002
+  - match:
+    - uri:
+        prefix: "/sockjs-node"
+    route:
+    - destination:
+        host: react-service
+        port:
+          number: 3000
+  - match:
+    - uri:
+        prefix: "/"
+    route:
+    - destination:
+        host: react-service
+        port:
+          number: 3000
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: default
+spec:
+  mtls:
+    mode: STRICT
