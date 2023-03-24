@@ -11,7 +11,7 @@ app.use(cors())
 app.use(bodyParser.json())
 
 
-app.get('/reviews/:id/', (req,res) => {
+app.get('/updates/:id/', (req,res) => {
     data.fetchRevsById(req.params.id)
     .then(revs => res.status(200).json(revs))
     .catch((err) => {
@@ -19,7 +19,7 @@ app.get('/reviews/:id/', (req,res) => {
     })
 })
 
-app.post('/reviews/:id/', cors(), (req,res)=> {
+app.post('/updates/:id/', cors(), (req,res)=> {
     const rev = {
         id_item : req.params.id,
         content : req.body.content
@@ -32,7 +32,7 @@ app.post('/reviews/:id/', cors(), (req,res)=> {
     })
 })
 
-app.delete('/reviews/:id', (req, res) => {
+app.delete('/updates/:id', (req, res) => {
     data.deleteRevs(req.params.id)
         .then(() => res.status(200).send(`Revs for Item ${req.params.id} deleted`))
         .catch((err) => {

@@ -6,7 +6,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 
 async function deleteRev(id) {
-    const response = await fetch(`http://api-two-service:3002/reviews/${id}`, {
+    const response = await fetch(`http://api-two-service:3002/updates/${id}`, {
         method: 'DELETE'
     })
     if (!response.ok) throw new Error(response.status)
@@ -18,7 +18,7 @@ const port = 3003
 app.use(cors())
 app.use(bodyParser.json())
 
-app.get('/items', (req, res) => {
+app.get('/topics', (req, res) => {
     data.fetchItems()
         .then(items => res.status(200).json(items))
         .catch((err) => {
@@ -26,7 +26,7 @@ app.get('/items', (req, res) => {
         })
 })
 
-app.post('/items', (req, res) => {
+app.post('/topics', (req, res) => {
     const id = randomBytes(4).toString('hex')
     const { name } = req.body
     let item = {
@@ -40,7 +40,7 @@ app.post('/items', (req, res) => {
         })
 })
 
-app.delete('/items/:id', (req, res) => {
+app.delete('/topics/:id', (req, res) => {
     
     deleteRev(req.params.id)
     .then(() => {

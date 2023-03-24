@@ -1,5 +1,5 @@
 async function fetchItems(){
-    const response = await fetch("/items", {
+    const response = await fetch("/topics", {
         headers: {
             "Content-type": "application/json"
         }
@@ -14,7 +14,7 @@ async function fetchItems(){
 }
 
 async function createItem(item) {
-    const response = await fetch("/items", {
+    const response = await fetch("/topics", {
         method: 'POST',
         body: JSON.stringify(item),
         headers: {
@@ -24,8 +24,15 @@ async function createItem(item) {
     if (!response.ok) throw new Error(response.status)
 }
 
+async function deleteItem(id) {
+    const response = await fetch(`/topics/${id}`, {
+        method: 'DELETE'
+    })
+    if (!response.ok) throw new Error(response.status)
+}
+
 async function createRev(rev) {
-    const response = await fetch(`/reviews/${rev.id_item}`, {
+    const response = await fetch(`/updates/${rev.id_item}`, {
         method: 'POST',
         body: JSON.stringify(rev),
         headers: {
@@ -36,7 +43,7 @@ async function createRev(rev) {
 }
 
 async function fetchRevs(id){
-    const response = await fetch(`/reviews/${id}`, {
+    const response = await fetch(`/updates/${id}`, {
         headers: {
             "Content-type": "application/json"
         }
@@ -50,12 +57,6 @@ async function fetchRevs(id){
     return revs
 }
 
-async function deleteItem(id) {
-    const response = await fetch(`/items/${id}`, {
-        method: 'DELETE'
-    })
-    if (!response.ok) throw new Error(response.status)
-}
 
 /* http://localhost:3003
 async function deleteRev(id) {
