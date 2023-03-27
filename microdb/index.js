@@ -6,7 +6,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 
 async function deleteRev(id) {
-    const response = await fetch(`http://api-two-service:3002/updates/${id}`, {
+    const response = await fetch(`http://api-two-service.appspace.svc.cluster.local:3002/updates/${id}`, {
         method: 'DELETE'
     })
     if (!response.ok) throw new Error(response.status)

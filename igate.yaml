@@ -29,7 +29,7 @@ spec:
         prefix: "/topics"
     route:
     - destination:
-        host: api-db-service
+        host: api-db-service.appspace.svc.cluster.local
         port:
           number: 3003
   - match:
@@ -37,7 +37,7 @@ spec:
         prefix: "/updates"
     route:
     - destination:
-        host: api-two-service
+        host: api-two-service.appspace.svc.cluster.local
         port:
           number: 3002
   - match:
@@ -45,7 +45,7 @@ spec:
         prefix: "/sockjs-node"
     route:
     - destination:
-        host: react-service
+        host: react-service.appspace.svc.cluster.local
         port:
           number: 3000
   - match:
@@ -53,15 +53,27 @@ spec:
         prefix: "/"
     route:
     - destination:
-        host: react-service
+        host: react-service.appspace.svc.cluster.local
         port:
           number: 3000
 ---
 apiVersion: security.istio.io/v1beta1
 kind: PeerAuthentication
 metadata:
-  name: default
-  namespace: default
+  name: default  #name of the policy
+  namespace: appspace
 spec:
   mtls:
     mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: politwo
+  namespace: appspace
+spec:
+  selector:
+    matchLabels:
+      app: api-two
+  mtls:
+    mode: PERMISSIVE
