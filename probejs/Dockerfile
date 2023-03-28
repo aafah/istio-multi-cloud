@@ -4,6 +4,6 @@ WORKDIR /app
 COPY package.json .
 RUN npm install
 COPY . .
-RUN apk add --no-cache jq
+RUN apk add --no-cache openssl jq
 EXPOSE 3001
 CMD ["npm", "start"]

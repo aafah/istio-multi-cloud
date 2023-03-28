@@ -56,24 +56,3 @@ spec:
         host: react-service.appspace.svc.cluster.local
         port:
           number: 3000
----
-apiVersion: security.istio.io/v1beta1
-kind: PeerAuthentication
-metadata:
-  name: default  #name of the policy
-  namespace: appspace
-spec:
-  mtls:
-    mode: STRICT
----
-apiVersion: security.istio.io/v1beta1
-kind: PeerAuthentication
-metadata:
-  name: politwo
-  namespace: appspace
-spec:
-  selector:
-    matchLabels:
-      app: api-two
-  mtls:
-    mode: PERMISSIVE
