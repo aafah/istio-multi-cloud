@@ -15,6 +15,7 @@ spec:
       labels:
         app: api-probe
     spec:
+      serviceAccountName: probe-acc
       containers:
         - name: api-probe
           image: probe-image
