@@ -30,7 +30,7 @@ spec:
   #Routes coming from the gate
   - from:
     - source:
-        principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway"]
+        principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account"]
     to:
     - operation:
         paths: ["/updates/*"]
@@ -73,12 +73,7 @@ spec:
     matchLabels:
       istio: ingressgateway
   rules:
-  - from:
-    - source:
-        "*"
-    to:
-    - operation:
-        paths: ["/*"]
+    - {}
 
 ---
 apiVersion: security.istio.io/v1beta1
@@ -95,8 +90,15 @@ spec:
   #Routes coming from the gate
   - from:
     - source:
-        principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway"]
+        principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account"]
+    to:
+    - operation:
+        paths: ["/topics"]
+        methods: ["GET", "POST"]
+  - from:
+    - source:
+        principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account"]
     to:
     - operation:
         paths: ["/topics/*"]
-        methods: ["GET", "POST"]
+        methods: ["DELETE"]
