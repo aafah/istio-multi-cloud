@@ -15,6 +15,7 @@ spec:
       labels:
         app: api-db
     spec:
+      serviceAccountName: probe-acc
       containers:
       - name: api-db
         image: microdb-image

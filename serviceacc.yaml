@@ -5,3 +5,11 @@ metadata:
   namespace: appspace
   labels:
     account: probe
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: db-acc
+  namespace: appspace
+  labels:
+    account: microdb

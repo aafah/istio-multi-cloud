@@ -1,45 +1,54 @@
+#Policy that by defaults denies all access
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
-  name: deny-all
+  name: "deny-all"
   namespace: istio-system
 spec: {}
+
 ---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
-  name: "allow-for-two"
+  name: "in-two"
   namespace: appspace
 spec:
   selector:
     matchLabels:
       app: api-two
   rules:
-#  - from:
-#    - source:
-#        principals: ["cluster.local/ns/appspace/svc/api-db-service"]
-#    to:
-#    - operation:
-#        paths: ["/updates/*"]
-#        methods: ["DELETE"]
-#  - from:
-#    - source:
-#        principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway"]
-#    to:
-#    - operation:
-#        paths: ["/updates/*"]
-#        methods: ["GET", "POST"]
-#  - from:
-#    - source:
-#        principals: ["cluster.local/ns/appspace/sa/probe-acc"]
-#    to:
-#    - operation:
-#        methods: ["DELETE"]
+
+  #Routes coming from microdb
+  - from:
+    - source:
+        principals: ["cluster.local/ns/appspace/sa/db-acc"]
+    to:
+    - operation:
+        paths: ["/updates/*"]
+        methods: ["DELETE"]
+
+  #Routes coming from the gate
+  - from:
+    - source:
+        principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway"]
+    to:
+    - operation:
+        paths: ["/updates/*"]
+        methods: ["GET", "POST"]
+
+  #Routes coming from the probe
+  - from:
+    - source:
+        principals: ["cluster.local/ns/appspace/sa/probe-acc"]
+    to:
+    - operation:
+        methods: ["GET"]
+
 ---
 apiVersion: "security.istio.io/v1beta1"
 kind: "AuthorizationPolicy"
 metadata:
-  name: "allow-for-gate"
+  name: "gate-react"
   namespace: appspace
 spec:
   selector:
@@ -52,3 +61,42 @@ spec:
     to:
     - operation:
         methods: ["GET"]
+
+---
+apiVersion: "security.istio.io/v1beta1"
+kind: "AuthorizationPolicy"
+metadata:
+  name: "allow-in-gate"
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      istio: ingressgateway
+  rules:
+  - from:
+    - source:
+        "*"
+    to:
+    - operation:
+        paths: ["/*"]
+
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: "in-db"
+  namespace: appspace
+spec:
+  selector:
+    matchLabels:
+      app: api-db
+  rules:
+
+  #Routes coming from the gate
+  - from:
+    - source:
+        principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway"]
+    to:
+    - operation:
+        paths: ["/topics/*"]
+        methods: ["GET", "POST"]
