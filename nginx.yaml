@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-deplo
-  namespace: appspace
+  namespace: default
   labels:
     app: nginx-d
 spec:
@@ -26,7 +26,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: nginx-service
-  namespace: appspace
+  namespace: default
 spec:
   selector:
     app: nginx-d

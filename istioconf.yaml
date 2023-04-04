@@ -9,13 +9,14 @@ spec:
     
 #---
 #apiVersion: security.istio.io/v1beta1
-#kind: PeerAuthentication
+#kind: RequestAuthentication
 #metadata:
-  #name: politwo
-  #namespace: appspace
+#  name: jwt-token-req
+#  namespace: istio-system
 #spec:
-  #selector:
-    #matchLabels:
-      #app: api-two
-  #mtls:
-    #mode: PERMISSIVE
+#  selector:
+#    matchLabels:
+#      istio: ingressgateway
+#  jwtRules:
+#  - issuer: http://keycloak-service.kcloak.svc.cluster.local:5432/realms/appcloak
+#    jwksUri: http://keycloak-service.kcloak.svc.cluster.local:5432/realms/protocol/openid-connect/certs
