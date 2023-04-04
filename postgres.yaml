@@ -33,16 +33,15 @@ spec:
         - name: PGDATA
           value: /var/lib/postgresql/data/pgdata
         volumeMounts:
-        - name: pg-vol
+        - name: mini-volume
           mountPath: /var/lib/postgresql/data
+          subPath: postgres
       volumes:
-      - name: pg-vol
-        hostPath:
-          path: /host/p-data 
-      #securityContext:
-        #runAsUser: 1000
-        #runAsGroup: 1000
-        #fsGroup: 1000
+      - name: mini-volume
+        #hostPath:
+          #path: /host/p-data 
+        persistentVolumeClaim:
+          claimName: postgres-miniv
 
 ---
 
