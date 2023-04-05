@@ -72,9 +72,11 @@ spec:
   selector:
     matchLabels:
       istio: ingressgateway
-  rules:
+  rules: 
     - {}
-
+   #- when:
+   #   - key: request.auth.claims[realm_access][roles]
+   #     values: ["Prime"]
 ---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -102,3 +104,6 @@ spec:
     - operation:
         paths: ["/topics/*"]
         methods: ["DELETE"]
+    when:
+     - key: request.auth.claims[realm_access][roles]
+       values: ["Prime"]
