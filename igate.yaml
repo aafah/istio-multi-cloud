@@ -33,6 +33,14 @@ spec:
         port:
           number: 3003
   - match:
+      - uri:
+          prefix: "/oauth2"
+    route:
+      - destination:
+          host: oauth-proxy-service.default.svc.cluster.local
+          port:
+            number: 4180
+  - match:
     - uri:
         prefix: "/updates"
     route:

@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: oauth-proxy
+  name: oauth-proxy-service
+spec:
+  #type: NodePort
+  selector:
+    app: oauth-proxy
+  ports:
+  - name: http-oauthproxy
+    port: 4180
+  #  nodePort: 31023
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: oauth-proxy
+  name: oauth-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "oauth-proxy"
+  template:
+    metadata:
+      labels:
+        app: oauth-proxy
+    spec:
+      containers:
+      - name: oauth-proxy
+        image: "quay.io/oauth2-proxy/oauth2-proxy:v7.2.0"
+        ports:
+        - containerPort: 4180
+        args:
+          - --http-address=0.0.0.0:4180
+          - --upstream="file://dev/null"
+          - --set-xauthrequest=true
+          - --pass-host-header=true
+          - --pass-access-token=true
+          - --whitelist-domain=".cluster.local"
+          - --login-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/auth
+          - --profile-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/userinfo
+          - --validate-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/userinfo 
+        env:
+          # OIDC Config
+          - name: "OAUTH2_PROXY_PROVIDER"
+            value: "keycloak-oidc"
+          - name: "OAUTH2_PROXY_OIDC_ISSUER_URL"
+            value: "http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak"
+          - name: "OAUTH2_PROXY_CLIENT_ID"
+            value: "appclient"
+          - name: "OAUTH2_PROXY_CLIENT_SECRET"
+            value: "pqWZDSC9asfNhERdxazOPxEHIHkGdq7N"
+          # Cookie Config
+          - name: "OAUTH2_PROXY_COOKIE_SECURE"
+            value: "false"
+          - name: "OAUTH2_PROXY_COOKIE_SECRET"
+            value: "ZzBkN000Wm0pQkVkKUhzMk5YPntQRUw_ME1oMTZZTy0="
+          #- name: "OAUTH2_PROXY_COOKIE_DOMAINS"
+          #  value: "*"
+          # Proxy config
+          - name: "OAUTH2_PROXY_EMAIL_DOMAINS"
+            value: "*"
+          - name: "OAUTH2_PROXY_WHITELIST_DOMAINS"
+            value: "*"
+          - name: "OAUTH2_PROXY_HTTP_ADDRESS"
+            value: "0.0.0.0:4180"
+          - name: "OAUTH2_PROXY_SET_XAUTHREQUEST"
+            value: "true"
+          - name: OAUTH2_PROXY_PASS_AUTHORIZATION_HEADER
+            value: "true"
+          - name: OAUTH2_PROXY_SSL_UPSTREAM_INSECURE_SKIP_VERIFY
+            value: "true"
+          - name: OAUTH2_PROXY_SKIP_PROVIDER_BUTTON
+            value: "true"
+          - name: OAUTH2_PROXY_SET_AUTHORIZATION_HEADER
+            value: "true"
