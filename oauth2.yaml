@@ -40,16 +40,20 @@ spec:
           - --set-xauthrequest=true
           - --pass-host-header=true
           - --pass-access-token=true
-          - --whitelist-domain=".cluster.local"
-          - --login-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/auth
-          - --profile-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/userinfo
-          - --validate-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/userinfo 
+          #- --whitelist-domain=".cluster.local"
+          # http://127.0.0.1:43705/realms/appcloak/.well-known/openid-configuration
+          #- --login-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/auth
+          #- --profile-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/userinfo
+          #- --validate-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/userinfo 
         env:
           # OIDC Config
           - name: "OAUTH2_PROXY_PROVIDER"
             value: "keycloak-oidc"
           - name: "OAUTH2_PROXY_OIDC_ISSUER_URL"
             value: "http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak"
+            #value: http://localhost:42561/realms/appcloak
+            #value: http://192.168.49.2:31020/realms/appcloak
+            
           - name: "OAUTH2_PROXY_CLIENT_ID"
             value: "appclient"
           - name: "OAUTH2_PROXY_CLIENT_SECRET"
