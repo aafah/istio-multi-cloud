@@ -2,12 +2,10 @@
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
-  name: "allow-all"
+  name: "deny-all"
   namespace: istio-system
 spec: 
-  rules: 
-    - {}
-
+  {}
 ---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -81,7 +79,7 @@ spec:
     - to:
       - operation:
           notPaths: ["/oauth2/*"]
-          paths: ["/"]
+          paths: ["/*"]
    #- when:
    #   - key: request.auth.claims[realm_access][roles]
    #     values: ["Prime"]
@@ -130,28 +128,22 @@ spec:
     - operation:
         paths: ["/topics/*"]
         methods: ["DELETE"]
-#    when:
-#     - key: request.auth.claims[realm_access][roles]
-#       values: ["Prime"]
+    when:
+    - key: request.auth.claims[resource_access][appclient][roles]
+      values: ["PRIME"]
 
-#---
-#apiVersion: security.istio.io/v1beta1
-#kind: AuthorizationPolicy
-#metadata:
-#  name: "del-db"
-#  namespace: appspace
-#spec:
-#  selector:
-#    matchLabels:
-#      app: api-db
-#  rules:
-  #- from:
-  #  - source:
-  #      principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account"]
-#  - to:
-#    - operation:
-#        paths: ["/topics/*"]
-#        methods: ["DELETE"]
-#  action: CUSTOM
-#  provider:
-#    name: oauth2-proxy
+---
+apiVersion: "security.istio.io/v1beta1"
+kind: "AuthorizationPolicy"
+metadata:
+  name: "allow-proxy-in-gate"
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      istio: ingressgateway
+  rules: 
+    - {}
+    #- from:
+    #  - source:
+    #      principals: ["cluster.local/ns/default/sa/oauth-acc"]

@@ -13,6 +13,13 @@ spec:
     port: 4180
   #  nodePort: 31023
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: oauth-acc
+  labels:
+    account: oauth
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -29,6 +36,7 @@ spec:
       labels:
         app: oauth-proxy
     spec:
+      serviceAccountName: oauth-acc
       containers:
       - name: oauth-proxy
         image: "quay.io/oauth2-proxy/oauth2-proxy:v7.2.0"
@@ -40,7 +48,7 @@ spec:
           - --set-xauthrequest=true
           - --pass-host-header=true
           - --pass-access-token=true
-          - --scope=email openid appclient
+          - --scope=data openid appclient
           #- --session-cookie-minimal=true
           - --skip-oidc-discovery
           - --login-url=http://127.0.0.1:36201/realms/appcloak/protocol/openid-connect/auth
