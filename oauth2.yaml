@@ -57,7 +57,7 @@ spec:
           - name: "OAUTH2_PROXY_CLIENT_ID"
             value: "appclient"
           - name: "OAUTH2_PROXY_CLIENT_SECRET"
-            value: "pqWZDSC9asfNhERdxazOPxEHIHkGdq7N"
+            value: "z27nDThMorZjxKWROIcc3BuWq1c6DJFI"
           # Cookie Config
           - name: "OAUTH2_PROXY_COOKIE_SECURE"
             value: "false"

@@ -7,3 +7,4 @@ kubectl apply -f istioconf.yaml
 kubectl apply -f policy.yaml
 kubectl apply -f postgres.yaml
 kubectl apply -f keycloak.yaml
+kubectl apply -f oauth2.yaml
