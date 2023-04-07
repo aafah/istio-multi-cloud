@@ -36,23 +36,25 @@ spec:
         - containerPort: 4180
         args:
           - --http-address=0.0.0.0:4180
-          - --upstream="file://dev/null"
+          - --upstream="static://200"
           - --set-xauthrequest=true
           - --pass-host-header=true
           - --pass-access-token=true
-          #- --whitelist-domain=".cluster.local"
-          # http://127.0.0.1:43705/realms/appcloak/.well-known/openid-configuration
-          #- --login-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/auth
-          #- --profile-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/userinfo
-          #- --validate-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/userinfo 
+          - --scope=email openid appclient
+          #- --session-cookie-minimal=true
+          - --skip-oidc-discovery
+          - --login-url=http://127.0.0.1:36201/realms/appcloak/protocol/openid-connect/auth
+          - --redeem-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/token
+          - --oidc-jwks-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/certs
+          ##- --validate-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/userinfo
         env:
           # OIDC Config
           - name: "OAUTH2_PROXY_PROVIDER"
             value: "keycloak-oidc"
           - name: "OAUTH2_PROXY_OIDC_ISSUER_URL"
-            value: "http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak"
+            #value: "http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak"
             #value: http://localhost:42561/realms/appcloak
-            #value: http://192.168.49.2:31020/realms/appcloak
+            value: http://127.0.0.1:36201/realms/appcloak
             
           - name: "OAUTH2_PROXY_CLIENT_ID"
             value: "appclient"
@@ -66,6 +68,9 @@ spec:
           #- name: "OAUTH2_PROXY_COOKIE_DOMAINS"
           #  value: "*"
           # Proxy config
+          #- name: OAUTH2_PROXY_UPSTREAMS
+            #value: "http://istio-ingressgateway.istio-system.svc.cluster.local:80/"
+          #  value: http://127.0.0.1:42465/
           - name: "OAUTH2_PROXY_EMAIL_DOMAINS"
             value: "*"
           - name: "OAUTH2_PROXY_WHITELIST_DOMAINS"
@@ -81,4 +86,12 @@ spec:
           - name: OAUTH2_PROXY_SKIP_PROVIDER_BUTTON
             value: "true"
           - name: OAUTH2_PROXY_SET_AUTHORIZATION_HEADER
+            value: "true"
+          - name: OAUTH2_PROXY_REQUEST_LOGGING
+            value: "true"
+          - name: OAUTH2_PROXY_SHOW_DEBUG_ON_ERROR
+            value: "true"
+          - name: OAUTH2_PROXY_ERRORS_TO_INFO_LOG
+            value: "true"
+          - name: OAUTH2_PROXY_PASS_HOST_HEADER
             value: "true"

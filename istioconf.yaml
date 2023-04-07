@@ -7,23 +7,23 @@ spec:
   mtls:
     mode: STRICT
     
----
-apiVersion: security.istio.io/v1beta1
-kind: RequestAuthentication
-metadata:
-  name: jwt-token-req
-  namespace: istio-system
-spec:
-  selector:
-    matchLabels:
-      istio: ingressgateway
-  jwtRules:
-  - issuer: http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak
-    jwksUri: http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/certs
-    forwardOriginalToken: true
-    fromHeaders: 
-      - name: Authorization
-        prefix: "Bearer "
+#---
+#apiVersion: security.istio.io/v1beta1
+#kind: RequestAuthentication
+#metadata:
+#  name: jwt-token-req
+#  namespace: istio-system
+#spec:
+#  selector:
+#    matchLabels:
+#      istio: ingressgateway
+#  jwtRules:
+#  - issuer: http://127.0.0.1:36201/realms/appcloak
+#    jwksUri: http://127.0.0.1:36201/realms/appcloak/protocol/openid-connect/certs
+#    forwardOriginalToken: true
+#    fromHeaders: 
+#      - name: Authorization
+#        prefix: "Bearer "
 
 #---
 #apiVersion: install.istio.io/v1alpha1

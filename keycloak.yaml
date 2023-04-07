@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
       - name: keycloak
-        image: quay.io/keycloak/keycloak:21.0.2
+        image: quay.io/keycloak/keycloak:latest
         args: ["start-dev"]
         env:
 #        - name: DB_ADDR
@@ -54,6 +54,10 @@ spec:
           value: "admin"
         - name: KC_PROXY
           value: "edge"
+        - name: KEYCLOAK_LOGLEVEL
+          value: DEBUG
+        - name: WILDFLY_LOGLEVEL
+          value: DEBUG
         #- name: KC_HOSTNAME
         #  value: keycloak.xxx
         - name: PROXY_ADDRESS_FORWARDING

@@ -2,9 +2,11 @@
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
-  name: "deny-all"
+  name: "allow-all"
   namespace: istio-system
-spec: {}
+spec: 
+  rules: 
+    - {}
 
 ---
 apiVersion: security.istio.io/v1beta1
@@ -83,6 +85,25 @@ spec:
    #- when:
    #   - key: request.auth.claims[realm_access][roles]
    #     values: ["Prime"]
+   
+---
+apiVersion: "security.istio.io/v1beta1"
+kind: "AuthorizationPolicy"
+metadata:
+  name: "allow-in-gate-oauth"
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      istio: ingressgateway
+  action: ALLOW
+  rules: 
+    - to:
+      - operation:
+          paths: ["/oauth2/*"]
+   #- when:
+   #   - key: request.auth.claims[realm_access][roles]
+   #     values: ["Prime"]
 ---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -109,9 +130,9 @@ spec:
     - operation:
         paths: ["/topics/*"]
         methods: ["DELETE"]
-    when:
-     - key: request.auth.claims[realm_access][roles]
-       values: ["Prime"]
+#    when:
+#     - key: request.auth.claims[realm_access][roles]
+#       values: ["Prime"]
 
 #---
 #apiVersion: security.istio.io/v1beta1
