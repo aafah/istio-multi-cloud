@@ -7,7 +7,7 @@ spec:
   selector:
     app: api-db
   ports:
-    - protocol: TCP
+    - name: http-db
       port: 3003
       targetPort: 3003
 ---

@@ -99,9 +99,6 @@ spec:
     - to:
       - operation:
           paths: ["/oauth2/*"]
-   #- when:
-   #   - key: request.auth.claims[realm_access][roles]
-   #     values: ["Prime"]
 ---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -121,17 +118,31 @@ spec:
     - operation:
         paths: ["/topics"]
         methods: ["GET", "POST"]
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: require-jwt-db
+  namespace: appspace
+spec:
+  selector:
+    matchLabels:
+      app: api-db
+  action: ALLOW
+  rules:
   - from:
     - source:
-        principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account"]
-    to:
+        #principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account"]
+        principals: ["*"]
+  - to:
     - operation:
         paths: ["/topics/*"]
         methods: ["DELETE"]
     when:
     - key: request.auth.claims[resource_access][appclient][roles]
       values: ["PRIME"]
-
+    #- key: request.auth.claims[iss]
+    #  values: ["http://127.0.0.1:8080/realms/appcloak"]
 ---
 apiVersion: "security.istio.io/v1beta1"
 kind: "AuthorizationPolicy"

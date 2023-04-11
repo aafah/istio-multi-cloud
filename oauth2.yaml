@@ -5,13 +5,13 @@ metadata:
     app: oauth-proxy
   name: oauth-proxy-service
 spec:
-  #type: NodePort
+  type: NodePort
   selector:
     app: oauth-proxy
   ports:
   - name: http-oauthproxy
     port: 4180
-  #  nodePort: 31023
+    nodePort: 30418
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -48,10 +48,12 @@ spec:
           - --set-xauthrequest=true
           - --pass-host-header=true
           - --pass-access-token=true
-          - --scope=data openid appclient
+          - --scope=kuserdata openid appclient
+          - --skip-jwt-bearer-tokens
+          - --pass-access-token=true
           #- --session-cookie-minimal=true
           - --skip-oidc-discovery
-          - --login-url=http://127.0.0.1:36201/realms/appcloak/protocol/openid-connect/auth
+          - --login-url=http://127.0.0.1:8080/realms/appcloak/protocol/openid-connect/auth
           - --redeem-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/token
           - --oidc-jwks-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/certs
           ##- --validate-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/userinfo
@@ -62,17 +64,19 @@ spec:
           - name: "OAUTH2_PROXY_OIDC_ISSUER_URL"
             #value: "http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak"
             #value: http://localhost:42561/realms/appcloak
-            value: http://127.0.0.1:36201/realms/appcloak
+            value: http://127.0.0.1:8080/realms/appcloak
             
           - name: "OAUTH2_PROXY_CLIENT_ID"
             value: "appclient"
           - name: "OAUTH2_PROXY_CLIENT_SECRET"
-            value: "z27nDThMorZjxKWROIcc3BuWq1c6DJFI"
+            value: "PPPCy6Nkl9AdA5DxdMALuoKeI3UqJTDp"
           # Cookie Config
           - name: "OAUTH2_PROXY_COOKIE_SECURE"
             value: "false"
           - name: "OAUTH2_PROXY_COOKIE_SECRET"
             value: "ZzBkN000Wm0pQkVkKUhzMk5YPntQRUw_ME1oMTZZTy0="
+          - name: "OAUTH2_PROXY_COOKIE_REFRESH"
+            value: "4m30s"
           #- name: "OAUTH2_PROXY_COOKIE_DOMAINS"
           #  value: "*"
           # Proxy config

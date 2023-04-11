@@ -18,7 +18,25 @@ spec:
     matchLabels:
       istio: ingressgateway
   jwtRules:
-  - issuer: http://127.0.0.1:36201/realms/appcloak
+  - issuer: http://127.0.0.1:8080/realms/appcloak
+    jwksUri: http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/certs
+    forwardOriginalToken: true
+    fromHeaders: 
+      - name: Authorization
+        prefix: "Bearer "
+
+---
+apiVersion: security.istio.io/v1
+kind: RequestAuthentication
+metadata:
+  name: jwt-db-req
+  namespace: appspace
+spec:
+  selector:
+    matchLabels:
+      app: api-db
+  jwtRules:
+  - issuer: http://127.0.0.1:8080/realms/appcloak
     jwksUri: http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/certs
     forwardOriginalToken: true
     fromHeaders: 

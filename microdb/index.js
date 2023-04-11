@@ -19,6 +19,7 @@ app.use(cors())
 app.use(bodyParser.json())
 
 app.get('/topics', (req, res) => {
+    console.log(JSON.stringify(req.headers));
     data.fetchItems()
         .then(items => res.status(200).json(items))
         .catch((err) => {

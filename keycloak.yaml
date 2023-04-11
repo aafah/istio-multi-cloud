@@ -9,10 +9,9 @@ spec:
   ports:
   - name: http-keycloak
     port: 8080
-    nodePort: 31020
   selector:
     app: keycloak
-  type: NodePort
+  type: LoadBalancer
   #externalTrafficPolicy: Local
 ---
 apiVersion: apps/v1
