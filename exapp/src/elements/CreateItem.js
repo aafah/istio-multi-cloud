@@ -32,7 +32,7 @@ function CreateItem({ setDirt }) {
     return (
         <Container fluid>
             <Form onSubmit={onSubmit}>
-                <Row no-gutters={true} className="align-items-center d-flex">
+                <Row className="align-items-center d-flex">
                     <Col xs="auto" className="align-items-center justify-self-start">
                         <Form.Label htmlFor="inlineFormInput" visuallyHidden>
                             Name
