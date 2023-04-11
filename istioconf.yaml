@@ -20,7 +20,7 @@ spec:
   jwtRules:
   - issuer: http://127.0.0.1:8080/realms/appcloak
     jwksUri: http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/certs
-    forwardOriginalToken: true
+    #forwardOriginalToken: true
     fromHeaders: 
       - name: Authorization
         prefix: "Bearer "
@@ -40,5 +40,4 @@ spec:
     jwksUri: http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/certs
     forwardOriginalToken: true
     fromHeaders: 
-      - name: Authorization
-        prefix: "Bearer "
+      - name: x-auth-request-access-token

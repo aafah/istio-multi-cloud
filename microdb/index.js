@@ -4,6 +4,7 @@ const express = require('express')
 const { randomBytes } = require('crypto')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const jwt = require('jsonwebtoken');
 
 async function deleteRev(id) {
     const response = await fetch(`http://api-two-service.appspace.svc.cluster.local:3002/updates/${id}`, {
@@ -19,12 +20,25 @@ app.use(cors())
 app.use(bodyParser.json())
 
 app.get('/topics', (req, res) => {
-    console.log(JSON.stringify(req.headers));
+
     data.fetchItems()
         .then(items => res.status(200).json(items))
         .catch((err) => {
             res.status(500).send(err)
         })
+})
+
+app.get('/debug', (req, res) => {
+
+    let par = ""
+
+    const token = req.headers['x-auth-request-access-token'];
+    if (token) {
+        const decodedToken = jwt.decode(token, { complete: true });
+        par = JSON.stringify(decodedToken)
+    }
+
+    res.status(200).json(par)
 })
 
 app.post('/topics', (req, res) => {

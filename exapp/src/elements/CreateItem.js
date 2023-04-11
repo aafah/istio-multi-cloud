@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, Container, Form, Row, Col } from "react-bootstrap"
 import * as API from '../API'
 
-function CreateItem({setDirt}) {
+function CreateItem({ setDirt }) {
     let [currentName, setName] = useState('')
 
     async function onSubmit(ev) {
@@ -14,8 +14,16 @@ function CreateItem({setDirt}) {
         try {
             await API.createItem(item)
             console.log(`Value is ${currentName}`)
-            setName('')            
+            setName('')
             setDirt(true)
+        } catch (err) {
+            console.log(`Error: ${err}`)
+        }
+    }
+
+    async function debugMe() {
+        try {
+            await API.debugJWT()
         } catch (err) {
             console.log(`Error: ${err}`)
         }
@@ -24,8 +32,8 @@ function CreateItem({setDirt}) {
     return (
         <Container fluid>
             <Form onSubmit={onSubmit}>
-                <Row className="align-items-center">
-                    <Col xs="auto">
+                <Row no-gutters={true} className="align-items-center d-flex">
+                    <Col xs="auto" className="align-items-center justify-self-start">
                         <Form.Label htmlFor="inlineFormInput" visuallyHidden>
                             Name
                         </Form.Label>
@@ -36,9 +44,14 @@ function CreateItem({setDirt}) {
                             onChange={ev => setName(ev.target.value)}
                         />
                     </Col>
-                    <Col xs="auto">
-                        <Button type="submit" variant='dark' className="mb-2">
+                    <Col xs="auto" className="align-items-center justify-self-start">
+                        <Button type="submit" variant='dark' className="mb-2 me-2">
                             Submit
+                        </Button>
+                    </Col>
+                    <Col className="align-items-center justify-content-end">
+                        <Button variant="secondary" className="mb-2" onClick={debugMe}>
+                            Debug
                         </Button>
                     </Col>
                 </Row>

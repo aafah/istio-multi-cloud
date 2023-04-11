@@ -13,6 +13,18 @@ async function fetchItems(){
     return items
 }
 
+async function debugJWT(){
+    const response = await fetch("/debug", {
+        headers: {
+            "Content-type": "application/json"
+        }
+    })
+    if (!response.ok) throw new Error(response.status)
+    const json = await response.json()
+    console.log(json)
+    return json
+}
+
 async function createItem(item) {
     const response = await fetch("/topics", {
         method: 'POST',
@@ -72,5 +84,6 @@ export {
     createItem,
     fetchRevs,
     createRev,
-    deleteItem
+    deleteItem,
+    debugJWT
 }

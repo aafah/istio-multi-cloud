@@ -118,6 +118,8 @@ spec:
     - operation:
         paths: ["/topics"]
         methods: ["GET", "POST"]
+    - operation:
+        paths: ["/debug"]
 ---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -132,9 +134,10 @@ spec:
   rules:
   - from:
     - source:
-        #principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account"]
-        principals: ["*"]
-  - to:
+        principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account"]
+        #principals: ["http://127.0.0.1:8080/realms/appcloak/*"]
+        #principals: ["*"]
+    to:
     - operation:
         paths: ["/topics/*"]
         methods: ["DELETE"]
