@@ -18,9 +18,9 @@ function UpdateList({itemId, dirt}) {
     const renderedUpdates = updates.length > 0 ? updates.map(
         (rev) => {
             return (
-                <ListGroup.Item key={rev.id} className="py-1">
+                <ListGroup.Item key={rev.id} className="py-1 list-group-item-action">
                     <Row className="align-content-center justify-content-between">
-                        <Col xs="auto" className="px-0">
+                        <Col xs="auto" className="px-0" >
                            {rev.content} 
                         </Col>
                         <Col xs="auto" className="px-0" >

@@ -5,13 +5,15 @@ import CreateUpdate from './CreateUpdate'
 import UpdateList from './UpdateList'
 import '../App.css';
 
-function TopicList({ dirt, setDirt }) {
+function TopicList({ dirt, setDirt, prime }) {
 
     const [items, setItems] = useState([])
+    console.log(prime)
 
     useEffect(() => {
         API.fetchTopics()
             .then((items) => {
+                console.log(items)
                 setItems(items)
             }).catch((err) => console.log(`Error: ${err}`))
     }, [dirt])
@@ -32,23 +34,25 @@ function TopicList({ dirt, setDirt }) {
                 <ListGroup.Item key={item.id} className="py-1">
                     <Row className="align-content-center justify-content-between pb-2">
                         <Col>
-                            <Row className='justify-content-start'>
+                            <Row className='justify-content-start align-items-center'>
                                 <Col xs="auto pr-0">
-                                    <Badge bg='dark' className='pt-1'>
+                                    <Badge 
+                                        className='pt-1'
+                                        ref={el => {if (el) el.style.setProperty('background-color', item.color, 'important')}}
+                                    >
                                         {item.owner ? item.owner : item.id}
                                     </Badge>
                                 </Col>
-                                <Col xs="auto px-0">
-                                    {item.name}
+                                <Col xs="auto" className="px-0 align-items-center">
+                                    <strong>{item.name}</strong>
                                 </Col>
                             </Row>
                         </Col>
                         <Col xs="auto">
                             <Row className='justify-content-end mx-0'>
-                                {false ? <Button variant="outline-dark" className="p-1 m-0" onClick={() => { deleteTopic(item.id) }}> X </Button> : <></>}
                                 <Col xs="auto" className="align-items-center px-0">
                                     <Badge
-                                        bg='secondary'
+                                        bg={prime? 'danger':'secondary'}
                                         className='pt-1 btn custom-btn'
                                         onClick={() => { deleteTopic(item.id) }}
                                     >X</Badge>

@@ -20,13 +20,30 @@ app.get('/userinfo', (req, res) => {
         const decodedToken = jwt.decode(token, { complete: true });
         par = JSON.parse(JSON.stringify(decodedToken))
     }
-    console.log(par)
-    let mail = par.payload.email?par.payload.email:"anon@test.app"
+    let prime = par.payload?.resource_access?.appclient?.roles?.includes("PRIME") ?? false
+    let mail = par.payload?.email?par.payload.email:"anon@cloak.app"
 
     data.fetchData(mail)
         .then(data => {
             let userData = {
                 email : mail,
+                id : data[0].id,
+                color : data[0].color,
+                prime : prime
+            }
+            res.status(200).json(userData)
+        })
+        .catch((err) => {
+            res.status(500).send(err)
+        })
+    
+})
+
+app.get('/userinfo/:mail', (req, res) => {
+
+    data.fetchData(req.params.mail)
+        .then(data => {
+            let userData = {
                 id : data[0].id,
                 color : data[0].color
             }

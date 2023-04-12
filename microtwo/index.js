@@ -38,7 +38,7 @@ app.post('/updates/:id/', cors(), async (req, res) => {
         const decodedToken = jwt.decode(token, { complete: true });
         par = JSON.parse(JSON.stringify(decodedToken))
     }
-    let owner = par.payload.email?par.payload.email:"anon@test.app"
+    let owner = par.payload?.email?par.payload.email:"anon@cloak.app"
 
     const upd = {
         id_item: req.params.id,
