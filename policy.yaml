@@ -80,9 +80,6 @@ spec:
       - operation:
           notPaths: ["/oauth2/*"]
           paths: ["/*"]
-   #- when:
-   #   - key: request.auth.claims[realm_access][roles]
-   #     values: ["Prime"]
    
 ---
 apiVersion: "security.istio.io/v1beta1"
