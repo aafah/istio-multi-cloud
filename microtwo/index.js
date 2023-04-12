@@ -2,6 +2,7 @@ const data = require('./db/db')
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
+const jwt = require('jsonwebtoken');
 
 const app = express()
 const port = 3002
@@ -10,36 +11,66 @@ const port = 3002
 app.use(cors())
 app.use(bodyParser.json())
 
-
-app.get('/updates/:id/', (req,res) => {
-    data.fetchRevsById(req.params.id)
-    .then(revs => res.status(200).json(revs))
-    .catch((err) => {
-        res.status(500).send(err)
+async function getTime() {
+    // http://worldtimeapi.org/api/timezone/Europe/Rome
+    const response = await fetch(`https://timeapi.io/api/Time/current/zone?timeZone=Europe/Rome`, {
+        method: 'GET'
     })
+    if (!response.ok) throw new Error(response.status)
+    const json = await response.json()
+    return JSON.stringify(json)
+}
+
+
+app.get('/updates/:id/', (req, res) => {
+    data.fetchUpdsById(req.params.id)
+        .then(revs => res.status(200).json(revs))
+        .catch((err) => {
+            res.status(500).send(err)
+        })
 })
 
-app.post('/updates/:id/', cors(), (req,res)=> {
-    const rev = {
-        id_item : req.params.id,
-        content : req.body.content
+app.post('/updates/:id/', cors(), async (req, res) => {
+
+    let par = {}
+    const token = req.headers['x-auth-request-access-token'];
+    if (token) {
+        const decodedToken = jwt.decode(token, { complete: true });
+        par = JSONE.parse(JSON.stringify(decodedToken))
     }
-    console.log(rev)
-    data.insertRev(rev)
-    .then(() => res.status(201).send(rev))
-    .catch((err) => {
-        res.status(500).send(err)
-    })
+    let owner = par.email?par.email:"anon@test.app"
+
+    const upd = {
+        id_item: req.params.id,
+        content: req.body.content,
+        owner: owner,
+        timestamp: "timeErr"
+    }
+    try {
+        let time = await getTime()
+        time = JSON.parse(time)
+        if (time.dateTime != null) {
+            upd.timestamp = time.dateTime.slice(0, 16)
+            console.log (upd)
+        }
+    }catch {}
+    
+    data.insertUpd(upd)
+        .then(() => res.status(201).send(upd))
+        .catch((err) => {
+            res.status(500).send(err)
+        })
+
 })
 
 app.delete('/updates/:id', (req, res) => {
-    data.deleteRevs(req.params.id)
-        .then(() => res.status(200).send(`Revs for Item ${req.params.id} deleted`))
+    data.deleteUpds(req.params.id)
+        .then(() => res.status(200).send(`Updates for Item ${req.params.id} deleted`))
         .catch((err) => {
-            res.status(500).json({ error: `Error deleting Revs for Item: ${err}` })
+            res.status(500).json({ error: `Error deleting Updates for Item: ${err}` })
         })
 })
 
 app.listen(port, () => {
-    console.log(`Review Service listening on PORT:${port}`)
+    console.log(`Updates Service listening on PORT:${port}`)
 })

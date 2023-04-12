@@ -6,8 +6,8 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const jwt = require('jsonwebtoken');
 
-async function deleteRev(id) {
-    const response = await fetch(`http://api-two-service.appspace.svc.cluster.local:3002/updates/${id}`, {
+async function deleteUpds(id) {
+    const response = await fetch(`http://localhost:3002/updates/${id}`, {
         method: 'DELETE'
     })
     if (!response.ok) throw new Error(response.status)
@@ -21,7 +21,7 @@ app.use(bodyParser.json())
 
 app.get('/topics', (req, res) => {
 
-    data.fetchItems()
+    data.fetchTopics()
         .then(items => res.status(200).json(items))
         .catch((err) => {
             res.status(500).send(err)
@@ -42,13 +42,23 @@ app.get('/debug', (req, res) => {
 })
 
 app.post('/topics', (req, res) => {
+
+    let par = {}
+    const token = req.headers['x-auth-request-access-token'];
+    if (token) {
+        const decodedToken = jwt.decode(token, { complete: true });
+        par = JSONE.parse(JSON.stringify(decodedToken))
+    }
+    let owner = par.email?par.email:"anon@test.app"
+
     const id = randomBytes(4).toString('hex')
+
     const { name } = req.body
     let item = {
         id: id,
         name: name
     }
-    data.insertItem(item)
+    data.insertTopic(item, owner)
         .then(() => res.status(201).send(item))
         .catch((err) => {
             res.status(500).send(err)
@@ -57,23 +67,23 @@ app.post('/topics', (req, res) => {
 
 app.delete('/topics/:id', (req, res) => {
     
-    deleteRev(req.params.id)
+    deleteUpds(req.params.id)
     .then(() => {
-        console.log(`Reviews for item ${req.params.id} deleted`)
-        data.deleteItem(req.params.id)
-        .then(() => res.status(200).send(`Item ${req.params.id} deleted`))
+        console.log(`Updates for topic ${req.params.id} deleted`)
+        data.deleteTopic(req.params.id)
+        .then(() => res.status(200).send(`Topic ${req.params.id} deleted`))
         .catch((err) => {
-            res.status(500).json({ error: `Error deleting Item: ${err}` })
+            res.status(500).json({ error: `Error deleting Topic: ${err}` })
         })
     })
     .catch((err) => {
-        res.status(500).json({ error: `Error deleting Reviews for Item: ${err}` })
+        res.status(500).json({ error: `Error deleting Updates for Topic: ${err}` })
     })
 
     
 })
 
 app.listen(port,
-    () => { console.log(`Inventory Service listening on PORT:${port}`) }
+    () => { console.log(`Topic Service listening on PORT:${port}`) }
 )
 
