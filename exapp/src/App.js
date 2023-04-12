@@ -25,7 +25,7 @@ function App() {
   return (
     <Container fluid className='py-2'>
       <CreateTopic setDirt={setDirt} user={user}/>
-      <TopicList dirt={dirt} setDirt={setDirt}/>
+      <TopicList dirt={dirt} setDirt={setDirt} prime={user.prime}/>
     </Container>
   )
 }

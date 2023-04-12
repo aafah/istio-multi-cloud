@@ -13,20 +13,40 @@ async function deleteUpds(id) {
     if (!response.ok) throw new Error(response.status)
 }
 
+const getData = async (owner) => {
+    try {
+      const response = await fetch(`http://localhost:3005/userinfo/${owner}`);
+      const data = await response.json();
+      return data.color;
+    } catch (error) {
+      console.error(`Error fetching data for owner ${owner}:`, error);
+      return { color: "#202323" };
+    }
+  }
+
 const app = express()
 const port = 3003
 
 app.use(cors())
 app.use(bodyParser.json())
 
-app.get('/topics', (req, res) => {
-
-    data.fetchTopics()
-        .then(items => res.status(200).json(items))
-        .catch((err) => {
-            res.status(500).send(err)
-        })
-})
+app.get('/topics', async (req, res) => {
+    try {
+      const items = await data.fetchTopics();
+  
+      const uniqueOwners = [...new Set(items.map(item => item.owner))];
+      const colors = await Promise.all(uniqueOwners.map(owner => getData(owner)));
+  
+      items.forEach(item => {
+        const color = colors[uniqueOwners.indexOf(item.owner)] || '#ffffff';
+        item.color = color;
+      });
+  
+      res.status(200).json(items);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  });
 
 app.get('/debug', (req, res) => {
 
@@ -47,9 +67,9 @@ app.post('/topics', (req, res) => {
     const token = req.headers['x-auth-request-access-token'];
     if (token) {
         const decodedToken = jwt.decode(token, { complete: true });
-        par = JSONE.parse(JSON.stringify(decodedToken))
+        par = JSON.parse(JSON.stringify(decodedToken))
     }
-    let owner = par.email?par.email:"anon@test.app"
+    let owner = par.payload?.email?par.payload.email:"anon@cloak.app"
 
     const id = randomBytes(4).toString('hex')
 
