@@ -15,7 +15,7 @@ async function deleteUpds(id) {
 
 const getData = async (owner) => {
     try {
-      const response = await fetch(`http://localhost:3005/userinfo/${owner}`);
+      const response = await fetch(`http://api-usr-service.appspace.svc.cluster.local:3005/userinfo/${owner}`);
       const data = await response.json();
       return data.color;
     } catch (error) {

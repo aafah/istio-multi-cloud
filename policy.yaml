@@ -173,3 +173,10 @@ spec:
     - operation:
         paths: ["/userinfo"]
         methods: ["GET"]
+  - from:
+    - source:
+        principals: ["cluster.local/ns/appspace/sa/db-acc"]
+    to:
+    - operation:
+        paths: ["/userinfo/*"]
+        methods: ["GET"]
