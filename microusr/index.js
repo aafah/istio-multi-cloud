@@ -18,9 +18,10 @@ app.get('/userinfo', (req, res) => {
     const token = req.headers['x-auth-request-access-token'];
     if (token) {
         const decodedToken = jwt.decode(token, { complete: true });
-        par = JSONE.parse(JSON.stringify(decodedToken))
+        par = JSON.parse(JSON.stringify(decodedToken))
     }
-    let mail = par.email?par.email:"anon@test.app"
+    console.log(par)
+    let mail = par.payload.email?par.payload.email:"anon@test.app"
 
     data.fetchData(mail)
         .then(data => {

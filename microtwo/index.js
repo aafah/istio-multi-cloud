@@ -36,9 +36,9 @@ app.post('/updates/:id/', cors(), async (req, res) => {
     const token = req.headers['x-auth-request-access-token'];
     if (token) {
         const decodedToken = jwt.decode(token, { complete: true });
-        par = JSONE.parse(JSON.stringify(decodedToken))
+        par = JSON.parse(JSON.stringify(decodedToken))
     }
-    let owner = par.email?par.email:"anon@test.app"
+    let owner = par.payload.email?par.payload.email:"anon@test.app"
 
     const upd = {
         id_item: req.params.id,
