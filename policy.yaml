@@ -154,6 +154,22 @@ spec:
       istio: ingressgateway
   rules: 
     - {}
-    #- from:
-    #  - source:
-    #      principals: ["cluster.local/ns/default/sa/oauth-acc"]
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: "in-usr"
+  namespace: appspace
+spec:
+  selector:
+    matchLabels:
+      app: api-usr
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account"]
+    to:
+    - operation:
+        paths: ["/userinfo"]
+        methods: ["GET"]

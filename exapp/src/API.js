@@ -1,5 +1,5 @@
 async function fetchTopics(){
-    const response = await fetch("http://localhost:3003/topics", {
+    const response = await fetch("/topics", {
         headers: {
             "Content-type": "application/json"
         }
@@ -14,7 +14,7 @@ async function fetchTopics(){
 }
 
 async function fetchUser(){
-    const response = await fetch("http://localhost:3005/userinfo", {
+    const response = await fetch("/userinfo", {
         headers: {
             "Content-type": "application/json"
         }
@@ -25,7 +25,7 @@ async function fetchUser(){
 }
 
 async function debugJWT(){
-    const response = await fetch("http://localhost:3003/debug", {
+    const response = await fetch("/debug", {
         headers: {
             "Content-type": "application/json"
         }
@@ -37,7 +37,7 @@ async function debugJWT(){
 }
 
 async function createTopic(item) {
-    const response = await fetch("http://localhost:3003/topics", {
+    const response = await fetch("/topics", {
         method: 'POST',
         body: JSON.stringify(item),
         headers: {
@@ -48,14 +48,14 @@ async function createTopic(item) {
 }
 
 async function deleteTopic(id) {
-    const response = await fetch(`http://localhost:3003/topics/${id}`, {
+    const response = await fetch(`/topics/${id}`, {
         method: 'DELETE'
     })
     if (!response.ok) throw new Error(response.status)
 }
 
 async function createUpdate(rev) {
-    const response = await fetch(`http://localhost:3002/updates/${rev.id_item}`, {
+    const response = await fetch(`/updates/${rev.id_item}`, {
         method: 'POST',
         body: JSON.stringify(rev),
         headers: {
@@ -66,7 +66,7 @@ async function createUpdate(rev) {
 }
 
 async function fetchUpdates(id){
-    const response = await fetch(`http://localhost:3002/updates/${id}`, {
+    const response = await fetch(`/updates/${id}`, {
         headers: {
             "Content-type": "application/json"
         }

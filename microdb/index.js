@@ -7,7 +7,7 @@ const cors = require('cors')
 const jwt = require('jsonwebtoken');
 
 async function deleteUpds(id) {
-    const response = await fetch(`http://localhost:3002/updates/${id}`, {
+    const response = await fetch(`http://api-two-service.appspace.cluster.local:3002/updates/${id}`, {
         method: 'DELETE'
     })
     if (!response.ok) throw new Error(response.status)
