@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Container, ListGroup, Badge, Col, Row, Button } from 'react-bootstrap'
+import { Container, ListGroup, Badge, Col, Row } from 'react-bootstrap'
 import * as API from '../API'
 import CreateUpdate from './CreateUpdate'
 import UpdateList from './UpdateList'
@@ -8,12 +8,12 @@ import '../App.css';
 function TopicList({ dirt, setDirt, prime }) {
 
     const [items, setItems] = useState([])
-    console.log(prime)
+    //console.log(prime)
 
     useEffect(() => {
         API.fetchTopics()
             .then((items) => {
-                console.log(items)
+                //console.log(items)
                 setItems(items)
             }).catch((err) => console.log(`Error: ${err}`))
     }, [dirt])

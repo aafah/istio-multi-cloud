@@ -51,9 +51,9 @@ app.post('/updates/:id/', cors(), async (req, res) => {
         time = JSON.parse(time)
         if (time.dateTime != null) {
             upd.timestamp = time.dateTime.slice(0, 16)
-            console.log (upd)
+            //console.log (upd)
         }
-    }catch {}
+    }catch (err){ console.log(err) }
     
     data.insertUpd(upd)
         .then(() => res.status(201).send(upd))
