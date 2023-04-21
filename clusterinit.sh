@@ -3,6 +3,7 @@ kubectl create namespace appspace
 kubectl create namespace kcloak
 kubectl label namespace appspace istio-injection=enabled
 kubectl apply -f pvs.yaml
+kubectl apply -f istio-configmap.yaml --force --overwrite
 ./dockerbuildall.sh
 
 
