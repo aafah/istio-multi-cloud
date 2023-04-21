@@ -15,5 +15,6 @@ kubectl apply -f oauth2.yaml
 #psql -h 127.0.0.1 -p 42223 -U p-user postgres
 #DELETE DATABASE keycloak;
 #CREATE DATABASE keycloak;
+#\q
 #psql -h 127.0.0.1 -p 42223 -d keycloak -U p-user < tesi/first/sqlcloak.db
 #
