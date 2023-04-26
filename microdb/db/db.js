@@ -1,32 +1,34 @@
 'use strict'
 const db = require('./db-init')
 
-exports.fetchItems = () => { //Ottiene Items
+exports.fetchTopics = () => { //Ottiene TOPICS
     return new Promise((success, failure) => {
-        const sql = 'SELECT * FROM ITEMS'
+        const sql = 'SELECT * FROM TOPICS'
         db.all(sql, [], (err, rows) => {
             if (err) {
                 failure(err)
                 return
             }
-            const items = rows.map((row) => ({
+            const TOPICS = rows.map((row) => ({
                 id: row.id,
-                name: row.name
+                name: row.name,
+                owner: row.owner
             }))
-            success(items)
+            success(TOPICS)
         })
     })
 }
 
-exports.insertItem = (item) => {
+exports.insertTopic = (item, owner) => {
     return new Promise((success, failure) => {
         const sql = `INSERT INTO 
-                        ITEMS(id, name)
-                            VALUES(?, ?)`
+                        TOPICS(id, name, owner)
+                            VALUES(?, ?, ?)`
         db.run(sql,
             [
                 item.id,
-                item.name
+                item.name,
+                owner
             ],
             (err) => {
                 if (err) {
@@ -39,9 +41,9 @@ exports.insertItem = (item) => {
     })
 }
 
-exports.deleteItem = (id) => {
+exports.deleteTopic = (id) => {
     return new Promise((success, failure) => {
-        const sql = 'DELETE FROM ITEMS WHERE id=?'
+        const sql = 'DELETE FROM TOPICS WHERE id=?'
         db.run(sql, [id], (err) => {
             if (err) {
                 failure(err)

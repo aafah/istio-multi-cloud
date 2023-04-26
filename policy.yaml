@@ -4,8 +4,8 @@ kind: AuthorizationPolicy
 metadata:
   name: "deny-all"
   namespace: istio-system
-spec: {}
-
+spec: 
+  {}
 ---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -72,11 +72,30 @@ spec:
   selector:
     matchLabels:
       istio: ingressgateway
+  action: CUSTOM
+  provider:
+    name: oauth2-proxy
   rules: 
-    - {}
-   #- when:
-   #   - key: request.auth.claims[realm_access][roles]
-   #     values: ["Prime"]
+    - to:
+      - operation:
+          notPaths: ["/oauth2/*"]
+          paths: ["/*"]
+   
+---
+apiVersion: "security.istio.io/v1beta1"
+kind: "AuthorizationPolicy"
+metadata:
+  name: "allow-in-gate-oauth"
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      istio: ingressgateway
+  action: ALLOW
+  rules: 
+    - to:
+      - operation:
+          paths: ["/oauth2/*"]
 ---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -87,9 +106,8 @@ spec:
   selector:
     matchLabels:
       app: api-db
+  action: ALLOW
   rules:
-
-  #Routes coming from the gate
   - from:
     - source:
         principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account"]
@@ -97,6 +115,20 @@ spec:
     - operation:
         paths: ["/topics"]
         methods: ["GET", "POST"]
+    - operation:
+        paths: ["/debug"]
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: require-jwt-db
+  namespace: appspace
+spec:
+  selector:
+    matchLabels:
+      app: api-db
+  action: ALLOW
+  rules:
   - from:
     - source:
         principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account"]
@@ -105,5 +137,43 @@ spec:
         paths: ["/topics/*"]
         methods: ["DELETE"]
     when:
-     - key: request.auth.claims[realm_access][roles]
-       values: ["Prime"]
+    - key: request.auth.claims[resource_access][appclient][roles]
+      values: ["PRIME"]
+---
+apiVersion: "security.istio.io/v1beta1"
+kind: "AuthorizationPolicy"
+metadata:
+  name: "allow-proxy-in-gate"
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      istio: ingressgateway
+  rules: 
+    - {}
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: "in-usr"
+  namespace: appspace
+spec:
+  selector:
+    matchLabels:
+      app: api-usr
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account"]
+    to:
+    - operation:
+        paths: ["/userinfo"]
+        methods: ["GET"]
+  - from:
+    - source:
+        principals: ["cluster.local/ns/appspace/sa/db-acc"]
+    to:
+    - operation:
+        paths: ["/userinfo/*"]
+        methods: ["GET"]

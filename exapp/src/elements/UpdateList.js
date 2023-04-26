@@ -1,26 +1,30 @@
 import React, {useState, useEffect} from 'react'
 import { Container, ListGroup, Row, Col } from 'react-bootstrap'
 import * as API from '../API'
+import '../App.css';
 
-function ReviewList({itemId, dirt}) {
+function UpdateList({itemId, dirt}) {
 
-    const [revs, setRevs] = useState([])
+    const [updates, setUpdates] = useState([])
 
     useEffect(() => {
-        API.fetchRevs(itemId)
+        API.fetchUpdates(itemId)
             .then((revs) => {
-                setRevs(revs)
+                setUpdates(revs)
             }).catch((err) => console.log(`Error: ${err}`))
 
     },[dirt])
 
-    const renderedRevs = revs.length > 0 ? revs.map(
+    const renderedUpdates = updates.length > 0 ? updates.map(
         (rev) => {
             return (
-                <ListGroup.Item key={rev.id} className="py-1">
+                <ListGroup.Item key={rev.id} className="py-1 list-group-item-action">
                     <Row className="align-content-center justify-content-between">
-                        <Col xs="auto">
+                        <Col xs="auto" className="px-0" >
                            {rev.content} 
+                        </Col>
+                        <Col xs="auto" className="px-0" >
+                           <p className="txt-style p-0 m-0 custom-txt">{rev.owner}#{rev.timestamp?rev.timestamp:""} </p>
                         </Col>
                     </Row>
                 </ListGroup.Item>
@@ -31,10 +35,10 @@ function ReviewList({itemId, dirt}) {
     return (
         <Container fluid>
             <ListGroup variant="flush">
-                {renderedRevs}
+                {renderedUpdates}
             </ListGroup>
         </Container>
     )
 }
 
-export default ReviewList
+export default UpdateList

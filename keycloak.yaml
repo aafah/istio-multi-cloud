@@ -7,9 +7,8 @@ metadata:
     app: keycloak-service
 spec:
   ports:
-  - name: http
+  - name: http-keycloak
     port: 8080
-    targetPort: 8080
   selector:
     app: keycloak
   type: LoadBalancer
@@ -34,8 +33,8 @@ spec:
     spec:
       containers:
       - name: keycloak
-        image: quay.io/keycloak/keycloak:21.0.2
-        args: ["start-dev"]
+        image: quay.io/keycloak/keycloak:latest
+        args: ["--spi-login-protocol-openid-connect-legacy-logout-redirect-uri=true start-dev"]
         env:
 #        - name: DB_ADDR
 #          value: postgres-service
@@ -54,6 +53,10 @@ spec:
           value: "admin"
         - name: KC_PROXY
           value: "edge"
+        - name: KEYCLOAK_LOGLEVEL
+          value: DEBUG
+        - name: WILDFLY_LOGLEVEL
+          value: DEBUG
         #- name: KC_HOSTNAME
         #  value: keycloak.xxx
         - name: PROXY_ADDRESS_FORWARDING

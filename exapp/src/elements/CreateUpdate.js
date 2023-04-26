@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Container, InputGroup, Form, Button } from 'react-bootstrap'
 import * as API from '../API'
 
-function CreateReview({ itemId, setDirt }) {
+function CreateUpdate({ itemId, setDirt }) {
     let [currentContent, setContent] = useState('')
 
     async function onSubmit(ev) {
@@ -13,8 +13,8 @@ function CreateReview({ itemId, setDirt }) {
         }
 
         try {
-            await API.createRev(rev)
-            console.log(`Rev is ${rev}`)
+            await API.createUpdate(rev)
+            console.log(`Rev is ${JSON.stringify(rev)}`)
             setContent('')
             setDirt(true)
         } catch (err) {
@@ -28,7 +28,7 @@ function CreateReview({ itemId, setDirt }) {
 
                 <InputGroup className="mb-3 pt-1">
                     <Form.Control
-                        placeholder="Review Content"
+                        placeholder="Post an Update"
                         value={currentContent}
                         onChange={ev => setContent(ev.target.value)}
                     />
@@ -42,4 +42,4 @@ function CreateReview({ itemId, setDirt }) {
     )
 }
 
-export default CreateReview
+export default CreateUpdate

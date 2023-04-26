@@ -34,6 +34,30 @@ spec:
           number: 3003
   - match:
     - uri:
+        prefix: "/debug"
+    route:
+    - destination:
+        host: api-db-service.appspace.svc.cluster.local
+        port:
+          number: 3003
+  - match:
+    - uri:
+        prefix: "/userinfo"
+    route:
+    - destination:
+        host: api-usr-service.appspace.svc.cluster.local
+        port:
+          number: 3005
+  - match:
+      - uri:
+          prefix: "/oauth2"
+    route:
+      - destination:
+          host: oauth-proxy-service.default.svc.cluster.local
+          port:
+            number: 4180
+  - match:
+    - uri:
         prefix: "/updates"
     route:
     - destination:
@@ -56,3 +80,4 @@ spec:
         host: react-service.appspace.svc.cluster.local
         port:
           number: 3000
+        
