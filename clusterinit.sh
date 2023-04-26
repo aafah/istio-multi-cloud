@@ -4,6 +4,8 @@ kubectl create namespace kcloak
 kubectl label namespace appspace istio-injection=enabled
 kubectl apply -f pvs.yaml
 kubectl apply -f istio-configmap.yaml --force --overwrite
+minikube addons enable metallb 
+kubectl apply -f config.yaml --force --overwrite
 ./dockerbuildall.sh
 
 
