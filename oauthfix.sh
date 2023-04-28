@@ -6,6 +6,8 @@ if [ $# -ne 1 ]; then
   exit 1
 fi
 
+echo "[4/6] Configuring oauth2..."
+
 # Set the IP address
 MY_SERVICE_IP=$1
 

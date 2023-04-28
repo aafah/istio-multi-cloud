@@ -1,3 +1,5 @@
+echo "[5/6] Building cluster..."
+
 kubectl apply -f microtwo.yaml
 kubectl apply -f microdb.yaml
 kubectl apply -f microusr.yaml
