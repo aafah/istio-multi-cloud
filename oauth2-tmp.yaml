@@ -54,10 +54,10 @@ spec:
           - --scope=kuserdata openid appclient
           - --skip-jwt-bearer-tokens
           - --pass-access-token=true
-          - --whitelist-domain=localhost:*
+          - --whitelist-domain=*
           #- --session-cookie-minimal=true
           - --skip-oidc-discovery
-          - --login-url=http://127.0.0.1:8080/realms/appcloak/protocol/openid-connect/auth
+          - --login-url=http://{{MY_SERVICE_IP}}/auth/realms/appcloak/protocol/openid-connect/auth
           - --redeem-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/token
           - --oidc-jwks-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/certs
           ##- --validate-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/userinfo
@@ -68,7 +68,7 @@ spec:
           - name: "OAUTH2_PROXY_OIDC_ISSUER_URL"
             #value: "http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak"
             #value: http://localhost:42561/realms/appcloak
-            value: http://127.0.0.1:8080/realms/appcloak
+            value: http://{{MY_SERVICE_IP}}/auth/realms/appcloak
             
           - name: "OAUTH2_PROXY_CLIENT_ID"
             value: "appclient"

@@ -6,10 +6,12 @@ kubectl apply -f probe.yaml
 kubectl apply -f igate.yaml
 kubectl apply -f istioconf.yaml
 kubectl apply -f policy.yaml
-kubectl apply -f postgres.yaml
 kubectl apply -f keycloak.yaml
+kubectl apply -f postgres.yaml
 kubectl apply -f redis.yaml
 kubectl apply -f oauth2.yaml
+
+./postgrescript.sh
 
 #kubectl delete -f keycloak.yaml
 #psql -h 127.0.0.1 -p 42223 -U p-user postgres
