@@ -1,7 +1,13 @@
 #!/bin/bash
 
+# Check if an IP address was provided as an argument
+if [ $# -ne 1 ]; then
+  echo "Usage: $0 <IP address>"
+  exit 1
+fi
+
 # Set the IP address
-MY_SERVICE_IP= $1
+MY_SERVICE_IP=$1
 
 # Generate the actual YAML file from the template
 cp oauth2-tmp.yaml oauth2.yaml

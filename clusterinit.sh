@@ -7,6 +7,7 @@ kubectl apply -f istio-configmap.yaml --force --overwrite
 minikube addons enable metallb 
 kubectl apply -f metal.yaml 
 ./dockerbuildall.sh
+./oauthfix.sh
 ./clusterbuild.sh
 
 
