@@ -58,8 +58,8 @@ spec:
           #- --session-cookie-minimal=true
           - --skip-oidc-discovery
           - --login-url=http://{{MY_SERVICE_IP}}/auth/realms/appcloak/protocol/openid-connect/auth
-          - --redeem-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/token
-          - --oidc-jwks-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/certs
+          - --redeem-url=http://keycloak-service.kcloak.svc.cluster.local:8080/auth/realms/appcloak/protocol/openid-connect/token
+          - --oidc-jwks-url=http://keycloak-service.kcloak.svc.cluster.local:8080/auth/realms/appcloak/protocol/openid-connect/certs
           ##- --validate-url=http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/userinfo
         env:
           # OIDC Config

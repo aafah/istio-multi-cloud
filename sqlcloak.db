@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 15.2 (Debian 15.2-1.pgdg110+1)
--- Dumped by pg_dump version 15.2 (Ubuntu 15.2-1.pgdg22.04+1)
+-- Dumped by pg_dump version 15.2 (Ubuntu 15.2-1.pgdg20.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -1097,7 +1097,7 @@ ALTER TABLE public.resource_scope OWNER TO "p-user";
 CREATE TABLE public.resource_server (
     id character varying(36) NOT NULL,
     allow_rs_remote_mgmt boolean DEFAULT false NOT NULL,
-    policy_enforce_mode character varying(15) NOT NULL,
+    policy_enforce_mode smallint NOT NULL,
     decision_strategy smallint DEFAULT 1 NOT NULL
 );
 
@@ -1132,8 +1132,8 @@ CREATE TABLE public.resource_server_policy (
     name character varying(255) NOT NULL,
     description character varying(255),
     type character varying(255) NOT NULL,
-    decision_strategy character varying(20),
-    logic character varying(20),
+    decision_strategy smallint,
+    logic smallint,
     resource_server_id character varying(36) NOT NULL,
     owner character varying(255)
 );
@@ -1664,7 +1664,7 @@ f873cfb9-b02d-4041-a04e-94aaea1da300	t	f	appcloak-realm	0	f	\N	\N	t	\N	f	287046c
 c57b6938-33d8-4648-8fe3-5fd3e1374b90	t	f	broker	0	f	\N	\N	t	\N	f	2e1c15b7-2a49-4f5f-89c6-4674089d429c	openid-connect	0	f	f	${client_broker}	f	client-secret	\N	\N	\N	t	f	f	f
 6b943d46-2a2b-4b1a-97d0-760a817d6905	t	f	security-admin-console	0	t	\N	/admin/appcloak/console/	f	\N	f	2e1c15b7-2a49-4f5f-89c6-4674089d429c	openid-connect	0	f	f	${client_security-admin-console}	f	client-secret	${authAdminUrl}	\N	\N	t	f	f	f
 11d96106-3724-47fd-9a8f-e799399eaf93	t	f	admin-cli	0	t	\N	\N	f	\N	f	2e1c15b7-2a49-4f5f-89c6-4674089d429c	openid-connect	0	f	f	${client_admin-cli}	f	client-secret	\N	\N	\N	f	f	t	f
-822cf6d2-8303-405f-bd09-e2bf0698c273	t	t	appclient	0	f	PPPCy6Nkl9AdA5DxdMALuoKeI3UqJTDp		f		f	2e1c15b7-2a49-4f5f-89c6-4674089d429c	openid-connect	-1	t	f		f	client-secret	http://127.0.0.1:8080		\N	t	f	t	f
+822cf6d2-8303-405f-bd09-e2bf0698c273	t	t	appclient	0	f	PPPCy6Nkl9AdA5DxdMALuoKeI3UqJTDp		f		f	2e1c15b7-2a49-4f5f-89c6-4674089d429c	openid-connect	-1	t	f		f	client-secret			\N	t	f	t	f
 \.
 
 
@@ -1686,11 +1686,9 @@ bfd39544-c4ea-4ea6-9645-29fd2651ae53	pkce.code.challenge.method	S256
 822cf6d2-8303-405f-bd09-e2bf0698c273	acr.loa.map	{}
 822cf6d2-8303-405f-bd09-e2bf0698c273	backchannel.logout.revoke.offline.tokens	false
 822cf6d2-8303-405f-bd09-e2bf0698c273	backchannel.logout.session.required	false
-822cf6d2-8303-405f-bd09-e2bf0698c273	backchannel.logout.url	http://localhost/oauth2/logout
 822cf6d2-8303-405f-bd09-e2bf0698c273	client.secret.creation.time	1680855861
 822cf6d2-8303-405f-bd09-e2bf0698c273	client_credentials.use_refresh_token	true
 822cf6d2-8303-405f-bd09-e2bf0698c273	display.on.consent.screen	false
-822cf6d2-8303-405f-bd09-e2bf0698c273	frontchannel.logout.url	http://localhost/oauth2/logout
 822cf6d2-8303-405f-bd09-e2bf0698c273	oauth2.device.authorization.grant.enabled	false
 822cf6d2-8303-405f-bd09-e2bf0698c273	oidc.ciba.grant.enabled	false
 822cf6d2-8303-405f-bd09-e2bf0698c273	require.pushed.authorization.requests	false
@@ -2344,6 +2342,8 @@ KEYCLOAK-18146-add-saml-art-binding-identifier	keycloak	META-INF/jpa-changelog-1
 20.0.0-12964-unsupported-dbs	keycloak	META-INF/jpa-changelog-20.0.0.xml	2023-04-07 08:12:36.508862	109	MARK_RAN	8:314e803baf2f1ec315b3464e398b8247	createIndex indexName=IDX_GROUP_ATT_BY_NAME_VALUE, tableName=GROUP_ATTRIBUTE		\N	4.16.1	\N	\N	0855153695
 client-attributes-string-accomodation-fixed	keycloak	META-INF/jpa-changelog-20.0.0.xml	2023-04-07 08:12:36.51592	110	EXECUTED	8:56e4677e7e12556f70b604c573840100	addColumn tableName=CLIENT_ATTRIBUTES; update tableName=CLIENT_ATTRIBUTES; dropColumn columnName=VALUE, tableName=CLIENT_ATTRIBUTES; renameColumn newColumnName=VALUE, oldColumnName=VALUE_NEW, tableName=CLIENT_ATTRIBUTES		\N	4.16.1	\N	\N	0855153695
 21.0.2-17277	keycloak	META-INF/jpa-changelog-21.0.2.xml	2023-04-07 08:12:36.52094	111	EXECUTED	8:8806cb33d2a546ce770384bf98cf6eac	customChange		\N	4.16.1	\N	\N	0855153695
+21.1.0-19404	keycloak	META-INF/jpa-changelog-21.1.0.xml	2023-04-28 14:40:10.139169	112	EXECUTED	8:fdb2924649d30555ab3a1744faba4928	modifyDataType columnName=DECISION_STRATEGY, tableName=RESOURCE_SERVER_POLICY; modifyDataType columnName=LOGIC, tableName=RESOURCE_SERVER_POLICY; modifyDataType columnName=POLICY_ENFORCE_MODE, tableName=RESOURCE_SERVER		\N	4.16.1	\N	\N	2692809921
+21.1.0-19404-2	keycloak	META-INF/jpa-changelog-21.1.0.xml	2023-04-28 14:40:10.14521	113	MARK_RAN	8:1c96cc2b10903bd07a03670098d67fd6	addColumn tableName=RESOURCE_SERVER_POLICY; update tableName=RESOURCE_SERVER_POLICY; dropColumn columnName=DECISION_STRATEGY, tableName=RESOURCE_SERVER_POLICY; renameColumn newColumnName=DECISION_STRATEGY, oldColumnName=DECISION_STRATEGY_NEW, tabl...		\N	4.16.1	\N	\N	2692809921
 \.
 
 
@@ -2623,6 +2623,7 @@ a9278262-3f0f-45a8-bc45-fbc48605220f	2e1c15b7-2a49-4f5f-89c6-4674089d429c	f	${ro
 
 COPY public.migration_model (id, version, update_time) FROM stdin;
 nbhjj	21.0.2	1680855156
+7n4pm	21.1.1	1682692810
 \.
 
 
@@ -2716,7 +2717,6 @@ b35da8db-d218-4b89-94cc-ae47897db305	locale	openid-connect	oidc-usermodel-attrib
 8e5abfe4-3d33-45a8-b108-28ccfb05058c	client roles	openid-connect	oidc-usermodel-client-role-mapper	\N	5acbbaac-1d2c-4bbf-8673-e7e5d5c9be2f
 102943b5-8ffe-4a59-85d0-4a755d995cf7	email	openid-connect	oidc-usermodel-property-mapper	\N	5acbbaac-1d2c-4bbf-8673-e7e5d5c9be2f
 8fc0388a-eea3-4734-9673-48e668d45381	full name	openid-connect	oidc-full-name-mapper	\N	5acbbaac-1d2c-4bbf-8673-e7e5d5c9be2f
-0f1f8799-b8e6-4d57-9b59-f224ac809c7d	Client ID	openid-connect	oidc-usersessionmodel-note-mapper	822cf6d2-8303-405f-bd09-e2bf0698c273	\N
 56cd1eb8-ba4b-4a66-aca7-d4662f9b89c1	Audience for appclient	openid-connect	oidc-audience-mapper	\N	b2eeba53-d96f-4aa8-be74-adb6aeffc304
 fb2034ff-9a8c-4134-ba2c-2ecec3eda249	client roles	openid-connect	oidc-usermodel-client-role-mapper	\N	d3d000da-67c1-492c-90c3-693fcdfe34fb
 b5bc76a9-64d0-47ce-9960-f677d36839b4	email	openid-connect	oidc-usermodel-property-mapper	\N	d3d000da-67c1-492c-90c3-693fcdfe34fb
@@ -2726,6 +2726,7 @@ c84ce008-c042-46fd-ba2b-06ff4dc59660	full name	openid-connect	oidc-full-name-map
 2242cb30-cf94-4430-bb87-6769e7afe7c3	realm roles	openid-connect	oidc-usermodel-realm-role-mapper	822cf6d2-8303-405f-bd09-e2bf0698c273	\N
 0fb02982-923d-4365-becb-6e89c0ae742d	Client IP Address	openid-connect	oidc-usersessionmodel-note-mapper	822cf6d2-8303-405f-bd09-e2bf0698c273	\N
 0b940579-d10e-4d26-b3d8-a0f9e28c37fc	Client Host	openid-connect	oidc-usersessionmodel-note-mapper	822cf6d2-8303-405f-bd09-e2bf0698c273	\N
+0f1f8799-b8e6-4d57-9b59-f224ac809c7d	Client ID	openid-connect	oidc-usersessionmodel-note-mapper	822cf6d2-8303-405f-bd09-e2bf0698c273	\N
 \.
 
 
@@ -3541,7 +3542,7 @@ COPY public.username_login_failure (realm_id, username, failed_login_not_before,
 COPY public.web_origins (client_id, value) FROM stdin;
 bfd39544-c4ea-4ea6-9645-29fd2651ae53	+
 6b943d46-2a2b-4b1a-97d0-760a817d6905	+
-822cf6d2-8303-405f-bd09-e2bf0698c273	http://localhost
+822cf6d2-8303-405f-bd09-e2bf0698c273	*
 \.
 
 

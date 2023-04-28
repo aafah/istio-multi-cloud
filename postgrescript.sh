@@ -12,7 +12,7 @@ echo "[6/6] Updating Postgres DB..."
 while [[ $(kubectl get pods -n $NAMESPACE $POD_NAME -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do
     echo "$message".
     message="$message."
-    sleep 5
+    sleep 10
 done
 echo "Pod $POD_NAME is now ready, commencing..."
 kubectl delete -f keycloak.yaml

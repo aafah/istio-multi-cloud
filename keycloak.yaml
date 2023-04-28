@@ -57,6 +57,8 @@ spec:
           value: DEBUG
         - name: WILDFLY_LOGLEVEL
           value: DEBUG
+        - name: KC_HTTP_RELATIVE_PATH
+          value: /auth/
         #- name: KC_HOSTNAME
         #  value: keycloak.xxx
         - name: PROXY_ADDRESS_FORWARDING
@@ -76,5 +78,5 @@ spec:
           containerPort: 8080
         readinessProbe:
           httpGet:
-            path: /realms/master
+            path: /auth/realms/master
             port: 8080
