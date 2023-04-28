@@ -7,6 +7,9 @@ fi
 # Set the IP address
 MY_SERVICE_IP=$1
 
+SECONDS=0
+
+minikube start --mount-string=/home/admar/first:/host --mount --cpus 4 --memory 10240
 istioctl install -y --set profile=demo --set values.global.proxy.privileged=true --set meshConfig.outboundTrafficPolicy.mode=REGISTRY_ONLY
 kubectl create namespace appspace
 kubectl create namespace kcloak
@@ -19,6 +22,9 @@ kubectl apply -f metal.yaml
 ./oauthfix.sh $MY_SERVICE_IP
 ./clusterbuild.sh
 
+echo "Cluster now up and running, have fun!"
+ELAPSED="Elapsed: $(($SECONDS / 3600))hrs $((($SECONDS / 60) % 60))min $(($SECONDS % 60))sec"
+echo $ELAPSED
 
 #EDIT ISTIO configmap
 #- name: "oauth2-proxy"

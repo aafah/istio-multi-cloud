@@ -13,6 +13,7 @@ done
 
 kubectl delete -f keycloak.yaml
 export PGPASSWORD=p-password
+sleep 5
 psql -h 192.168.49.7 -p 5432 -d postgres -U p-user -c "DROP DATABASE keycloak"
 psql -h 192.168.49.7 -p 5432 -d postgres -U p-user -c "CREATE DATABASE keycloak"
 psql -h 192.168.49.7 -p 5432 -d keycloak -U p-user < ./sqlcloak.db
