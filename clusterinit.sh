@@ -1,3 +1,12 @@
+# Check if an IP address was provided as an argument
+if [ $# -ne 1 ]; then
+  echo "Usage: $0 <IP address>"
+  exit 1
+fi
+
+# Set the IP address
+MY_SERVICE_IP=$1
+
 istioctl install -y --set profile=demo --set values.global.proxy.privileged=true --set meshConfig.outboundTrafficPolicy.mode=REGISTRY_ONLY
 kubectl create namespace appspace
 kubectl create namespace kcloak
@@ -7,7 +16,7 @@ kubectl apply -f istio-configmap.yaml --force --overwrite
 minikube addons enable metallb 
 kubectl apply -f metal.yaml 
 ./dockerbuildall.sh
-./oauthfix.sh
+./oauthfix.sh $MY_SERVICE_IP
 ./clusterbuild.sh
 
 
