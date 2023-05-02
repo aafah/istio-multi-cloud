@@ -22,7 +22,7 @@ minikube addons enable metallb
 kubectl apply -f metal.yaml
 
 ./dockerbuildall.sh
-./oauthfix.sh $MY_SERVICE_IP
+./dynfix.sh $MY_SERVICE_IP
 ./clusterbuild.sh
 
 echo "Cluster now up and running, have fun!"

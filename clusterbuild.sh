@@ -1,13 +1,16 @@
 echo "[5/6] Building cluster..."
 
+
+kubectl apply -f istioconf.yaml
+kubectl apply -f jwtrules.yaml
+kubectl apply -f policy.yaml
+
 kubectl apply -f microtwo.yaml
 kubectl apply -f microdb.yaml
 kubectl apply -f microusr.yaml
 kubectl apply -f react.yaml
 kubectl apply -f probe.yaml
 kubectl apply -f igate.yaml
-kubectl apply -f istioconf.yaml
-kubectl apply -f policy.yaml
 kubectl apply -f keycloak.yaml
 kubectl apply -f postgres.yaml
 kubectl apply -f redis.yaml
