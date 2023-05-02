@@ -2223,6 +2223,7 @@ COPY public.credential (id, salt, type, user_id, created_date, user_label, secre
 bc66f062-f7db-4fd5-b3ee-9a0ff360281f	\N	password	1e594cab-5def-4a3e-b280-cdae2d61b8f0	1680855158800	\N	{"value":"Psjd1NeL96mpRn6Zls7FpROpT3eXJXel/gTv9e+ADTk=","salt":"rIt2eJhgOWsSkWVQyw+Dsg==","additionalParameters":{}}	{"hashIterations":27500,"algorithm":"pbkdf2-sha256","additionalParameters":{}}	10
 36cde150-0176-4a0d-906e-85233f301418	\N	password	8f68582a-f8a1-4212-919a-8a8fc935e22e	1680856561599	My password	{"value":"ElCp9Uj1A7ZzxORpBbIc//pLXup5JC4bFik4xFhg8oQ=","salt":"9oYFarN8ywxRKUFHDjZzsg==","additionalParameters":{}}	{"hashIterations":27500,"algorithm":"pbkdf2-sha256","additionalParameters":{}}	10
 dd677e00-85f5-4f4f-a0d2-341be3e84f4b	\N	password	6205481c-a11c-40cb-96da-b65afbda83f9	1680856599146	My password	{"value":"uEZjgyFiokiQpBKLvvLUfyE75I7aOLaVTxK8arx9c1A=","salt":"+G07fiWPnvhevvyZ2ZIYJg==","additionalParameters":{}}	{"hashIterations":27500,"algorithm":"pbkdf2-sha256","additionalParameters":{}}	10
+ddc9ad81-9e3e-4424-9eb3-cec242ebf142	\N	password	92b12629-57b8-4c44-866e-3f331b9cbf91	1683018464102	My password	{"value":"1v//3USuKPRs0jUUWzLmzjtX4t144N2H5B59/b3UceU=","salt":"ro/c13QUPsBDxDNU/4Terg==","additionalParameters":{}}	{"hashIterations":27500,"algorithm":"pbkdf2-sha256","additionalParameters":{}}	10
 \.
 
 
@@ -2395,6 +2396,7 @@ COPY public.default_client_scope (realm_id, scope_id, default_scope) FROM stdin;
 --
 
 COPY public.event_entity (id, client_id, details_json, error, ip_address, realm_id, session_id, event_time, type, user_id) FROM stdin;
+e89690fb-63c6-491f-b86c-72d3524db583	appclient	{"auth_method":"openid-connect","auth_type":"code","redirect_uri":"http://13.38.90.142/oauth2/callback","code_id":"a4ba0846-69e0-42df-a1b4-0a1fef87caff","username":"user-two"}	invalid_user_credentials	10.244.0.1	2e1c15b7-2a49-4f5f-89c6-4674089d429c	\N	1683018405390	LOGIN_ERROR	92b12629-57b8-4c44-866e-3f331b9cbf91
 \.
 
 
@@ -3430,6 +3432,7 @@ COPY public.user_entity (id, email, email_constraint, email_verified, enabled, f
 1e594cab-5def-4a3e-b280-cdae2d61b8f0	\N	8685d7ac-6be7-4f06-83d2-3ef3be5bdc56	f	t	\N	\N	\N	287046cc-e6b7-4855-8352-1420fa15991e	admin	1680855158601	\N	0
 8f68582a-f8a1-4212-919a-8a8fc935e22e	g.bacca@cloak.app	g.bacca@cloak.app	t	t	\N	Gianluca	Bacca	2e1c15b7-2a49-4f5f-89c6-4674089d429c	user-zero	1680856550164	\N	0
 6205481c-a11c-40cb-96da-b65afbda83f9	u.fragola@cloak.app	u.fragola@cloak.app	t	t	\N	Umberto	Fragola	2e1c15b7-2a49-4f5f-89c6-4674089d429c	user-one	1680856584869	\N	0
+92b12629-57b8-4c44-866e-3f331b9cbf91	p.valtempesta@cloak.app	p.valtempesta@cloak.app	t	t	\N	Pierugo	Valtempesta	2e1c15b7-2a49-4f5f-89c6-4674089d429c	user-two	1683018027255	\N	0
 \.
 
 
@@ -3508,6 +3511,7 @@ d802e1af-ab6c-4193-99d5-cca8baf02f4e	1e594cab-5def-4a3e-b280-cdae2d61b8f0
 e8802256-f094-4c15-9ba3-8c7af073c741	8f68582a-f8a1-4212-919a-8a8fc935e22e
 e8802256-f094-4c15-9ba3-8c7af073c741	6205481c-a11c-40cb-96da-b65afbda83f9
 149a33af-6c39-4fc5-a3bb-23a594d468bb	6205481c-a11c-40cb-96da-b65afbda83f9
+e8802256-f094-4c15-9ba3-8c7af073c741	92b12629-57b8-4c44-866e-3f331b9cbf91
 \.
 
 

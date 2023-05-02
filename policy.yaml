@@ -58,9 +58,9 @@ spec:
   - from:
     - source:
         principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account"]
-    to:
-    - operation:
-        methods: ["GET"]
+    #to:
+    #- operation:
+    #    methods: ["GET"]
 
 ---
 apiVersion: "security.istio.io/v1beta1"
@@ -78,7 +78,7 @@ spec:
   rules: 
     - to:
       - operation:
-          notPaths: ["/oauth2/*"]
+          notPaths: ["/oauth2/*", "/sockjs-node/*"]
           paths: ["/*"]
    
 ---
@@ -95,7 +95,7 @@ spec:
   rules: 
     - to:
       - operation:
-          paths: ["/oauth2/*"]
+          paths: ["/oauth2/*", "/sockjs-node/*"]
 ---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy

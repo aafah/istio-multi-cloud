@@ -8,8 +8,8 @@ spec:
     matchLabels:
       app: api-db
   jwtRules:
-  - issuer: http://{{MY_SERVICE_IP}}/realms/appcloak
-    jwksUri: http://keycloak-service.kcloak.svc.cluster.local:8080/realms/appcloak/protocol/openid-connect/certs
+  - issuer: http://{{MY_SERVICE_IP}}/auth/realms/appcloak
+    jwksUri: http://keycloak-service.kcloak.svc.cluster.local:8080/auth/realms/appcloak/protocol/openid-connect/certs
     forwardOriginalToken: true
     fromHeaders: 
       - name: x-auth-request-access-token
