@@ -12,7 +12,7 @@ echo "[1/6] Starting minikube..."
 minikube start --mount-string=/home/admar/first:/host --mount --cpus 4 --memory 10240
 
 echo "[2/6] Configuring the mesh..."
-istioctl install -y --set profile=demo --set values.global.proxy.privileged=true --set meshConfig.outboundTrafficPolicy.mode=REGISTRY_ONLY
+istioctl install -y --set profile=demo --set values.pilot.env.EXTERNAL_ISTIOD=true --set values.global.proxy.privileged=true --set meshConfig.outboundTrafficPolicy.mode=REGISTRY_ONLY -f cluster1.yaml
 kubectl create namespace appspace
 kubectl create namespace kcloak
 kubectl label namespace appspace istio-injection=enabled
@@ -26,6 +26,7 @@ kubectl apply -f metal.yaml
 ./clusterbuild.sh
 
 echo "Cluster now up and running, have fun!"
+./multicluster.sh
 ELAPSED="Elapsed: $(($SECONDS / 3600))hrs $((($SECONDS / 60) % 60))min $(($SECONDS % 60))sec"
 echo $ELAPSED
 

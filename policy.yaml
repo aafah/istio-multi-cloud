@@ -177,3 +177,15 @@ spec:
     - operation:
         paths: ["/userinfo/*"]
         methods: ["GET"]
+---
+apiVersion: "security.istio.io/v1beta1"
+kind: "AuthorizationPolicy"
+metadata:
+  name: "allow-eastwest-gate"
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      istio: eastwestgateway
+  rules: 
+    - {}

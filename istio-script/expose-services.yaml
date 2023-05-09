@@ -1,0 +1,21 @@
+#Since the clusters are on separate networks, we also need to expose all user services (*.local) 
+# on the east-west gateway in both clusters. While this gateway is public on the Internet, services 
+# behind it can only be accessed by services with a trusted mTLS certificate and workload ID, just as 
+# if they were on the same network.
+
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: cross-network-gateway
+spec:
+  selector:
+    istio: eastwestgateway
+  servers:
+    - port:
+        number: 15443
+        name: tls
+        protocol: TLS
+      tls:
+        mode: AUTO_PASSTHROUGH
+      hosts:
+        - "*.local"

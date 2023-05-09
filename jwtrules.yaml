@@ -1,0 +1,15 @@
+apiVersion: security.istio.io/v1
+kind: RequestAuthentication
+metadata:
+  name: jwt-db-req
+  namespace: appspace
+spec:
+  selector:
+    matchLabels:
+      app: api-db
+  jwtRules:
+  - issuer: http://35.180.188.93/auth/realms/appcloak
+    jwksUri: http://keycloak-service.kcloak.svc.cluster.local:8080/auth/realms/appcloak/protocol/openid-connect/certs
+    forwardOriginalToken: true
+    fromHeaders: 
+      - name: x-auth-request-access-token
