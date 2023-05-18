@@ -8,7 +8,7 @@ spec:
     matchLabels:
       app: api-db
   jwtRules:
-  - issuer: http://35.180.28.65/auth/realms/appcloak
+  - issuer: http://15.236.179.137/auth/realms/appcloak
     jwksUri: http://keycloak-service.kcloak.svc.cluster.local:8080/auth/realms/appcloak/protocol/openid-connect/certs
     forwardOriginalToken: true
     fromHeaders: 
