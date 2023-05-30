@@ -11,7 +11,7 @@ SECONDS=0
 echo "[1/6] Starting minikube..."
 minikube start --mount-string=/home/admar/first:/host --mount \
 --cpus 4 --memory 10240 \
---apiserver-ips $MY_SERVICE_IP
+--apiserver-ips $MY_SERVICE_IP 
 
 echo "Setting up certificates..."
 kubectl create namespace istio-system
@@ -28,9 +28,10 @@ kubectl create secret generic cacerts -n istio-system \
 
 echo "[2/6] Configuring the mesh..."
 
+#--set values.pilot.env.EXTERNAL_ISTIOD=true \
+
 istioctl install -y \
   --set profile=demo \
-  --set values.pilot.env.EXTERNAL_ISTIOD=true \
   --set values.global.proxy.privileged=true \
   --set meshConfig.outboundTrafficPolicy.mode=REGISTRY_ONLY \
   -f operator.yaml
@@ -41,6 +42,7 @@ kubectl create namespace kcloak
 kubectl label namespace appspace istio-injection=enabled
 kubectl apply -f pvs.yaml
 # kubectl apply -f istio-configmap.yaml --force --overwrite
+
 minikube addons enable metallb 
 kubectl apply -f metal.yaml
 

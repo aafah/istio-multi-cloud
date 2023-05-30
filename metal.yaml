@@ -6,7 +6,10 @@ data:
       protocol: layer2
       addresses:
       - 192.168.49.5-192.168.49.10
+      
 kind: ConfigMap
 metadata:
   name: config
   namespace: metallb-system
+
+#- 13.37.241.78-13.37.241.88
