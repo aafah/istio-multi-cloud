@@ -1,20 +1,20 @@
 echo "[5/6] Building cluster..."
 
 
-kubectl apply -f istioconf.yaml
-kubectl apply -f jwtrules.yaml
-kubectl apply -f policy.yaml
+kubectl apply -f istioconf.yaml --context='cube1'
+kubectl apply -f jwtrules.yaml --context='cube1'
+kubectl apply -f policy.yaml --context='cube1'
 
-kubectl apply -f microtwo.yaml
-kubectl apply -f microdb.yaml
-kubectl apply -f microusr.yaml
-kubectl apply -f react.yaml
-kubectl apply -f probe.yaml
-kubectl apply -f igate.yaml
-kubectl apply -f keycloak.yaml
-kubectl apply -f postgres.yaml
-kubectl apply -f redis.yaml
-kubectl apply -f oauth2.yaml
+kubectl apply -f microtwo.yaml --context='cube1'
+kubectl apply -f microdb.yaml --context='cube1'
+kubectl apply -f microusr.yaml --context='cube1'
+kubectl apply -f react.yaml --context='cube1'
+kubectl apply -f probe.yaml --context='cube1'
+kubectl apply -f igate.yaml --context='cube1'
+kubectl apply -f keycloak.yaml --context='cube1'
+kubectl apply -f postgres.yaml --context='cube1'
+kubectl apply -f redis.yaml --context='cube1'
+kubectl apply -f oauth2.yaml --context='cube1'
 
 ./postgrescript.sh
 

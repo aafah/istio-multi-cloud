@@ -8,7 +8,7 @@ function update_progress {
 }
 echo "[3/6] Building docker images..."
 update_progress 0
-eval $(minikube docker-env)
+eval $(minikube docker-env --profile='cube1')
 docker build -t probe-image probejs/
 update_progress 10
 docker build -t microtwo-image microtwo/

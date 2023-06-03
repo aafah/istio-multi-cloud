@@ -1,0 +1,16 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  namespace: istio-system
+spec:
+  #profile: remote
+  values:
+    global:
+      meshID: mesh1
+      multiCluster:
+        clusterName: cluster2
+      network: network2
+    #istiodRemote:
+      #injectionPath: /inject/cluster/cluster2/net/network2
+    #global:
+      #remotePilotAddress: {{ADDRESS}}
