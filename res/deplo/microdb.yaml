@@ -49,7 +49,7 @@ spec:
       volumes:
       - name: db-data
         hostPath:
-          path: /host/microdb/db/microdb.db 
+          path: /host/app-code/microdb/db/microdb.db 
           type: File
 # minikube mount $HOME:/host is necessary
 # or minikube start --mount-string="$HOME:/host" --mount

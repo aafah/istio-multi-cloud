@@ -27,7 +27,7 @@ spec:
       volumes:
       - name: db-data
         hostPath:
-          path: /host/microtwo/db/microtwo.db
+          path: /host/app-code/microtwo/db/microtwo.db
           type: File
 --- 
 apiVersion: v1
