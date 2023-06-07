@@ -1,0 +1,25 @@
+#!/bin/bash
+
+LABEL_SELECTOR="app=postgres"
+NAMESPACE="kcloak"
+
+POD_NAME=$(kubectl get pods -n $NAMESPACE -l $LABEL_SELECTOR --context='cube1' -o jsonpath='{.items[0].metadata.name}')
+message="Waiting for pod $POD_NAME to be ready"
+
+echo "[6/6] Updating Postgres DB..."
+
+# Check if the pod is ready
+while [[ $(kubectl get pods -n $NAMESPACE $POD_NAME --context='cube1' -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do
+    echo "$message".
+    message="$message."
+    sleep 10
+done
+echo "Pod $POD_NAME is now ready, commencing..."
+kubectl delete -f res/deplo/keycloak.yaml --context='cube1'
+export PGPASSWORD=p-password
+sleep 3
+psql -h 192.168.49.8 -p 5432 -d postgres -U p-user -c "DROP DATABASE keycloak"
+psql -h 192.168.49.8 -p 5432 -d postgres -U p-user -c "CREATE DATABASE keycloak"
+echo "Postgres db aligned, $(psql -h 192.168.49.8 -p 5432 -d keycloak -U p-user < res/sqlcloak.db | wc -l) lines of output omitted"
+#psql -h 192.168.49.8 -p 5432 -d keycloak -U p-user < ./sqlcloak.db
+kubectl apply -f res/deplo/keycloak.yaml --context='cube1'
