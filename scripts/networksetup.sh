@@ -16,3 +16,7 @@ echo "Created cube2 network with bridge: cube2-net"
 sudo iptables -I DOCKER-USER -i "cube1-net" -o "cube2-net" -j ACCEPT
 sudo iptables -I DOCKER-USER -i "cube2-net" -o "cube1-net" -j ACCEPT
 echo "Added iptables rules for network bridges"
+
+echo "Fixing pod-number limitations"
+sudo sysctl fs.inotify.max_user_watches=655360
+sudo sysctl fs.inotify.max_user_instances=1280

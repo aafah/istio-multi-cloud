@@ -1,5 +1,9 @@
-echo "[5/6] Building cluster..."
+if [ $# -ne 2 ]; then
+  echo "Usage: $0 <Num of clusters> <Postgress IP>"
+  exit 1
+fi
 
+echo "[5/6] Building cluster..."
 
 kubectl apply -f res/istio/istioconf.yaml --context='cube1'
 kubectl apply -f res/istio/jwtrules.yaml --context='cube1'
@@ -11,9 +15,16 @@ kubectl apply -f res/deplo/microusr.yaml --context='cube1'
 kubectl apply -f res/deplo/react.yaml --context='cube1'
 kubectl apply -f res/deplo/probe.yaml --context='cube1'
 kubectl apply -f res/istio/igate.yaml --context='cube1'
-kubectl apply -f res/deplo/keycloak.yaml --context='cube1'
-kubectl apply -f res/deplo/postgres.yaml --context='cube1'
+if [ $1 -ne 1 ]; then
+    kubectl apply -f res/deplo/keycloak.yaml --context='cube1'
+    kubectl apply -f res/deplo/postgres.yaml --context='cube1'
+else
+    kubectl apply -f res/deplo/postgres.yaml --context='cube1'
+    kubectl apply -f res/deplo/keycloak.yaml --context='cube1'
+fi
 kubectl apply -f res/deplo/redis.yaml --context='cube1'
 kubectl apply -f res/deplo/oauth2.yaml --context='cube1'
 
-scripts/postgrescript.sh
+sleep 15
+
+scripts/postgrescript.sh $2

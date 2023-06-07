@@ -1,5 +1,5 @@
 # Check the number of arguments
-if [[ $# -lt 1 || $# -gt 3 ]]; then
+if [[ $# -lt 1 || $# -gt 4 ]]; then
   echo "Usage: $0 <IP address> [flags]"
   exit 1
 fi
@@ -60,32 +60,38 @@ istioctl install -y \
   --set profile=demo \
   --set values.global.proxy.privileged=true \
   --set meshConfig.outboundTrafficPolicy.mode=REGISTRY_ONLY \
-  --set values.pilot.env.EXTERNAL_ISTIOD=true \
   --context='cube1' \
   -f res/istio/operator.yaml 
-
-#Sets up Required resources for multicluster purposes
-scripts/multicluster.sh
-echo "First Cluster now up and running..."
-
-#Start up and configure Istio on Remote Cluster
-scripts/remotecluster.sh
 
 ELAPSED="Infrastructure configured! Elapsed: $(($SECONDS / 3600))hrs $((($SECONDS / 60) % 60))min $(($SECONDS % 60))sec"
 echo $ELAPSED
 
-# Check if the --test flag is passed
-if [[ " $* " == *" --test "* ]]; then
-  #Tests connectivity between clusters
-  scripts/verify.sh
-else
-  echo "Skipping test phase. Run clusterinit.sh with --test to verify connectivity"
+if [[ " $* " == *" --multi "* ]]; then
+  #Sets up Required resources for multicluster purposes
+  scripts/multicluster.sh
+  sleep 15
+  echo "First Cluster now up and running..."
+
+  #Start up and configure Istio on Remote Cluster
+  scripts/remotecluster.sh
+
+  # Check if the --test flag is passed
+  if [[ " $* " == *" --test "* ]]; then
+    #Tests connectivity between clusters
+    scripts/verify.sh --init
+  else
+    echo "Skipping test phase. Run clusterinit.sh with --test to verify connectivity"
+  fi
 fi
 
 # Check if the --app flag is passed
 if [[ " $* " == *" --app "* ]]; then 
   echo "Mounting application, please wait..."
-  scripts/appmount.sh $MY_SERVICE_IP
+  if [[ " $* " == *" --multi "* ]]; then
+    scripts/appmount.sh $MY_SERVICE_IP 2 192.168.49.8
+  else
+    scripts/appmount.sh $MY_SERVICE_IP 1 192.168.49.6
+  fi
 else
   echo "Skipping app mounting phase. Run clusterinit.sh with --app to mount the application"
 fi

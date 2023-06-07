@@ -19,3 +19,4 @@ docker build -t microusr-image app-code/microusr/
 update_progress 70
 docker build -t react-image app-code/exapp/
 update_progress 100
+eval $(minikube docker-env --profile='cube1' --unset)

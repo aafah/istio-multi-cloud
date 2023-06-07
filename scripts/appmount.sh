@@ -1,6 +1,6 @@
 # Check if an IP address was provided as an argument
-if [ $# -ne 1 ]; then
-  echo "Usage: $0 <IP address>"
+if [ $# -ne 3 ]; then
+  echo "Usage: $0 <IP address> <Num of cluster> <Postgress IP>"
   exit 1
 fi
 
@@ -11,4 +11,4 @@ kubectl apply -f res/pvs.yaml --context='cube1'
 
 scripts/dockerbuildall.sh
 scripts/dynfix.sh $1
-scripts/clusterbuild.sh
+scripts/clusterbuild.sh $2 $3
