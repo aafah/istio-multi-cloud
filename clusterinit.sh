@@ -4,13 +4,19 @@ if [[ $# -lt 1 || $# -gt 4 ]]; then
   exit 1
 fi
 
+# Check if the --multi flag is passed
+if [[ " $* " == *" --multi "* ]]; then
+  MULTI=1
+else
+  MULTI=0
+fi
+
 # Set the IP address
 MY_SERVICE_IP=$1
-
 SECONDS=0
 
 # Create Networks
-scripts/networksetup.sh
+scripts/networksetup.sh $MULTI
 
 echo " "
 echo "------------------------"
@@ -35,7 +41,7 @@ echo " "
 
 #Starts up minikube
 echo "[1/3] Starting minikube..."
-minikube start --mount-string=/home/admar/first:/host --mount \
+minikube start --mount-string=/home/admar/first/app-code:/host --mount \
   --service-cluster-ip-range='10.96.0.0/12' \
   --apiserver-ips 192.168.49.2 \
   --cpus 2 --memory 8000 \
@@ -55,6 +61,12 @@ echo "[2/3] Configuring the mesh..."
 minikube addons enable metallb --profile='cube1'
 kubectl apply -f res/metal.yaml --context='cube1'
 
+if [[ " $* " == *" --app "* ]]; then 
+  scripts/dynfix.sh $MY_SERVICE_IP $MULTI 1
+else
+  scripts/dynfix.sh $MY_SERVICE_IP $MULTI 0
+fi
+
 kubectl label namespace istio-system topology.istio.io/network=network1 --context='cube1'
 istioctl install -y \
   --set profile=demo \
@@ -66,7 +78,8 @@ istioctl install -y \
 ELAPSED="Infrastructure configured! Elapsed: $(($SECONDS / 3600))hrs $((($SECONDS / 60) % 60))min $(($SECONDS % 60))sec"
 echo $ELAPSED
 
-if [[ " $* " == *" --multi "* ]]; then
+# Check for multi-cloud installation
+if [[ "$MULTI" -eq 1 ]]; then
   #Sets up Required resources for multicluster purposes
   scripts/multicluster.sh
   sleep 15
@@ -74,7 +87,6 @@ if [[ " $* " == *" --multi "* ]]; then
 
   #Start up and configure Istio on Remote Cluster
   scripts/remotecluster.sh
-
   # Check if the --test flag is passed
   if [[ " $* " == *" --test "* ]]; then
     #Tests connectivity between clusters
@@ -82,18 +94,20 @@ if [[ " $* " == *" --multi "* ]]; then
   else
     echo "Skipping test phase. Run clusterinit.sh with --test to verify connectivity"
   fi
+else
+    echo "Skipping multicloud installation. Run cluster with --multi for that purpose"
 fi
 
 # Check if the --app flag is passed
 if [[ " $* " == *" --app "* ]]; then 
   echo "Mounting application, please wait..."
-  if [[ " $* " == *" --multi "* ]]; then
-    scripts/appmount.sh $MY_SERVICE_IP 2 192.168.49.8
-  else
-    scripts/appmount.sh $MY_SERVICE_IP 1 192.168.49.6
-  fi
+  scripts/appmount.sh $MULTI
 else
   echo "Skipping app mounting phase. Run clusterinit.sh with --app to mount the application"
+fi
+
+if [[ " $* " == *" --kiali "* ]]; then
+  scripts/observe.sh
 fi
 
 TOTELA="Finish! Total Time: $(($SECONDS / 3600))hrs $((($SECONDS / 60) % 60))min $(($SECONDS % 60))sec"

@@ -15,8 +15,9 @@ docker build -t microtwo-image app-code/microtwo/
 update_progress 30
 docker build -t microdb-image app-code/microdb/
 update_progress 50
-docker build -t microusr-image app-code/microusr/
-update_progress 70
 docker build -t react-image app-code/exapp/
+update_progress 80
+eval $(minikube docker-env --profile='cube2')
+docker build -t microusr-image app2-code/microusr/
 update_progress 100
-eval $(minikube docker-env --profile='cube1' --unset)
+eval $(minikube docker-env --profile='cube2' --unset)

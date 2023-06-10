@@ -5,13 +5,15 @@ echo "-------------------------"
 echo " "
 
 echo "[1/3] Starting second minikube cluster cube2..."
-minikube start \
+minikube start --mount-string=/home/admar/first/app2-code:/host2 --mount \
     --service-cluster-ip-range='10.112.0.0/12' \
     --apiserver-ips 192.168.58.2 \
     --cpus 2 --memory 6000 \
     --profile cube2 
 
-kubectl create namespace appspace --context='cube2'
+kubectl create namespace mainzone --context='cube2'
+kubectl label namespace mainzone istio-injection=enabled --context='cube2'
+
 minikube addons enable metallb --profile='cube2'
 kubectl apply -f res/metal2.yaml --context='cube2'
 

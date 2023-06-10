@@ -2,7 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: api-usr-service
-  namespace: appspace
+  labels:
+    svc: api-usr
 spec:
   selector:
     app: api-usr
@@ -15,15 +16,14 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: usr-acc
-  namespace: appspace
   labels:
     account: microusr
+    svc: api-usr
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: api-usr-deplo
-  namespace: appspace
   labels:
     app: api-usr
 spec:
@@ -49,7 +49,7 @@ spec:
       volumes:
       - name: usr-data
         hostPath:
-          path: /host/app-code/microusr/db/microusr.db 
+          path: /host2/microusr/db/microusr.db 
           type: File
 # minikube mount $HOME:/host is necessary
 # or minikube start --mount-string="$HOME:/host" --mount

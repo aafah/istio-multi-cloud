@@ -2,7 +2,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: keycloak-service
-  namespace: kcloak
   labels:
     app: keycloak-service
 spec:
@@ -18,7 +17,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: keycloak
-  namespace: kcloak
   labels:
     app: keycloak
 spec:
