@@ -4,6 +4,7 @@ metadata:
   name: keycloak-service
   labels:
     app: keycloak-service
+    svc: keycloak
 spec:
   ports:
   - name: http-keycloak
@@ -65,7 +66,7 @@ spec:
         - name: KC_DB
           value: postgres
         - name: KC_DB_URL
-          value: jdbc:postgresql://postgres-service.kcloak.svc.cluster.local:5432/keycloak
+          value: jdbc:postgresql://postgres-service.authzone.svc.cluster.local:5432/keycloak
         - name: KC_DB_USERNAME
           value: p-user
         - name: KC_DB_PASSWORD

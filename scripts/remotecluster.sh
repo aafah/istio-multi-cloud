@@ -14,10 +14,6 @@ minikube start --mount-string=/home/admar/first/app2-code:/host2 --mount \
 #kubectl create namespace mainzone --context='cube2'
 #kubectl label namespace mainzone istio-injection=enabled --context='cube2'
 
-kubectl create namespace appspace --context='cube2'
-kubectl label namespace appspace istio-injection=enabled --context='cube2'
-kubectl create namespace kcloak --context='cube2'
-
 minikube addons enable metallb --profile='cube2'
 kubectl apply -f res/metal2.yaml --context='cube2'
 

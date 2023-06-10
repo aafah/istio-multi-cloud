@@ -53,7 +53,7 @@ spec:
           prefix: "/oauth2"
     route:
       - destination:
-          host: oauth-proxy-service.default.svc.cluster.local
+          host: oauth-proxy-service.authzone.svc.cluster.local
           port:
             number: 4180
   - match:

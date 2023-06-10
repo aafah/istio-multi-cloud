@@ -6,7 +6,7 @@ spec:
     extensionProviders:
     - name: "oauth2-proxy"
       envoyExtAuthzHttp:
-        service: "oauth-proxy-service.default.svc.cluster.local"
+        service: "oauth-proxy-service.authzone.svc.cluster.local"
         port: "4180" # The default port used by oauth2-proxy.
         includeHeadersInCheck: ["authorization", "cookie","x-forwarded-access-token","x-forwarded-user","x-forwarded-email","x-forwarded-proto","proxy-authorization","user-agent","x-forwarded-host","from","x-forwarded-for","accept","x-auth-request-redirect"] # headers sent to the oauth2-proxy in the check request.
         headersToUpstreamOnAllow: ["authorization", "path", "x-auth-request-user", "x-auth-request-email", "x-auth-request-access-token","x-forwarded-access-token", "X-Auth-Request-Redirect"] # headers sent to backend application when request is allowed.

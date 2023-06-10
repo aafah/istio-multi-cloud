@@ -5,14 +5,15 @@ if [ $# -ne 1 ]; then
 fi
 
 if [ $1 -eq 1 ]; then
-    POSTGRESIP=192.168.49.7
+    POSTGRESIP=192.168.58.7
+    CONTEXT=cube2
 else
     POSTGRESIP=192.168.49.6
+    CONTEXT=cube1
 fi
 
 
-CONTEXT=cube1
-NAMESPACE=kcloak
+NAMESPACE=authzone
 
 LABEL_SELECTOR="app=postgres"
 
@@ -35,4 +36,5 @@ psql -h $POSTGRESIP -p 5432 -d postgres -U p-user -c "DROP DATABASE keycloak"
 psql -h $POSTGRESIP -p 5432 -d postgres -U p-user -c "CREATE DATABASE keycloak"
 echo "Postgres db aligned, $(psql -h $POSTGRESIP -p 5432 -d keycloak -U p-user < res/sqlcloak.db | wc -l) lines of output omitted"
 #psql -h 192.168.49.8 -p 5432 -d keycloak -U p-user < ./sqlcloak.db
+
 kubectl apply -f res/deplo/keycloak.yaml --context=$CONTEXT -n $NAMESPACE

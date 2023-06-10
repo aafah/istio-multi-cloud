@@ -2,7 +2,7 @@ MULTI=$1
 
 # Define the new IP address and hostname
 if [ $MULTI -eq 1 ]; then
-    new_ip="192.168.49.8"
+    new_ip="192.168.58.8"
 else
     new_ip="192.168.49.7"
 fi

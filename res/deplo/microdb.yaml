@@ -2,7 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: api-db-service
-  namespace: appspace
+  labels:
+    svc: api-db
 spec:
   selector:
     app: api-db
@@ -15,15 +16,14 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: db-acc
-  namespace: appspace
   labels:
     account: microdb
+    svc: api-db
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: api-db-deplo
-  namespace: appspace
   labels:
     app: api-db
 spec:

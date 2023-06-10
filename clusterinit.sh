@@ -1,5 +1,5 @@
 # Check the number of arguments
-if [[ $# -lt 1 || $# -gt 4 ]]; then
+if [[ $# -lt 1 || $# -gt 5 ]]; then
   echo "Usage: $0 <IP address> [flags]"
   exit 1
 fi
@@ -16,7 +16,7 @@ MY_SERVICE_IP=$1
 SECONDS=0
 
 # Create Networks
-scripts/networksetup.sh $MULTI
+scripts/networksetup.sh $MULTI 
 
 echo " "
 echo "------------------------"
@@ -61,9 +61,9 @@ echo "[2/3] Configuring the mesh..."
 minikube addons enable metallb --profile='cube1'
 kubectl apply -f res/metal.yaml --context='cube1'
 
-if [[ " $* " == *" --app "* ]]; then 
-  scripts/dynfix.sh $MY_SERVICE_IP 
-fi
+
+scripts/dynfix.sh $MY_SERVICE_IP
+
 
 kubectl label namespace istio-system topology.istio.io/network=network1 --context='cube1'
 istioctl install -y \
@@ -80,7 +80,7 @@ echo $ELAPSED
 if [[ "$MULTI" -eq 1 ]]; then
   #Sets up Required resources for multicluster purposes
   scripts/multicluster.sh
-  sleep 15
+  sleep 10
   echo "First Cluster now up and running..."
 
   #Start up and configure Istio on Remote Cluster
@@ -105,7 +105,7 @@ else
 fi
 
 if [[ " $* " == *" --kiali "* ]]; then
-  scripts/observe.sh
+  scripts/observe.sh $MULTI
 fi
 
 TOTELA="Finish! Total Time: $(($SECONDS / 3600))hrs $((($SECONDS / 60) % 60))min $(($SECONDS % 60))sec"

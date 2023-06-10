@@ -58,9 +58,6 @@ spec:
   - from:
     - source:
         principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account"]
-    #to:
-    #- operation:
-    #    methods: ["GET"]
 
 ---
 apiVersion: "security.istio.io/v1beta1"
