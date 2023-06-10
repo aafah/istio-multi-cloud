@@ -4,7 +4,13 @@ if [ $# -ne 1 ]; then
   exit 1
 fi
 
-POSTGRESIP=192.168.49.7
+if [ $1 -eq 1 ]; then
+    POSTGRESIP=192.168.49.7
+else
+    POSTGRESIP=192.168.49.6
+fi
+
+
 CONTEXT=cube1
 NAMESPACE=kcloak
 

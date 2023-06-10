@@ -44,7 +44,7 @@ echo "[1/3] Starting minikube..."
 minikube start --mount-string=/home/admar/first/app-code:/host --mount \
   --service-cluster-ip-range='10.96.0.0/12' \
   --apiserver-ips 192.168.49.2 \
-  --cpus 2 --memory 8000 \
+  --cpus 2 --memory 7000 \
   --profile cube1
 
 #--apiserver-ips $MY_SERVICE_IP\
@@ -62,9 +62,7 @@ minikube addons enable metallb --profile='cube1'
 kubectl apply -f res/metal.yaml --context='cube1'
 
 if [[ " $* " == *" --app "* ]]; then 
-  scripts/dynfix.sh $MY_SERVICE_IP $MULTI 1
-else
-  scripts/dynfix.sh $MY_SERVICE_IP $MULTI 0
+  scripts/dynfix.sh $MY_SERVICE_IP 
 fi
 
 kubectl label namespace istio-system topology.istio.io/network=network1 --context='cube1'

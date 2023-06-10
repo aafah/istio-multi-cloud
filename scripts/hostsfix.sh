@@ -1,7 +1,12 @@
 MULTI=$1
 
 # Define the new IP address and hostname
-new_ip="192.168.49.8"
+if [ $MULTI -eq 1 ]; then
+    new_ip="192.168.49.8"
+else
+    new_ip="192.168.49.7"
+fi
+
 hostname="keycloak.com"
 
 # Use grep to search for the line containing the old IP address and extract it

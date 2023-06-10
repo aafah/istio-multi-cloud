@@ -6,18 +6,16 @@ function update_progress {
   local empty=$(printf "%${left}s" | tr ' ' '-')
   echo "$fill" "$empty" "$1"
 }
+
 echo "[3/6] Building docker images..."
 update_progress 0
 eval $(minikube docker-env --profile='cube1')
 docker build -t probe-image app-code/probejs/
-update_progress 10
+update_progress 20
 docker build -t microtwo-image app-code/microtwo/
-update_progress 30
+update_progress 40
 docker build -t microdb-image app-code/microdb/
-update_progress 50
+update_progress 60
 docker build -t react-image app-code/exapp/
-update_progress 80
-eval $(minikube docker-env --profile='cube2')
-docker build -t microusr-image app2-code/microusr/
 update_progress 100
-eval $(minikube docker-env --profile='cube2' --unset)
+eval $(minikube docker-env --profile='cube1' --unset)

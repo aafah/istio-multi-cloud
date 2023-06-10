@@ -3,7 +3,8 @@ echo "------------------------"
 echo "     NETWORK SETUP"
 echo "------------------------"
 echo " "
-echo "Creating communicating networks for the two clusters..."
+
+echo "Networking..."
 # Create the cube1 network
 docker network create -d bridge --opt com.docker.network.bridge.name=cube1-net cube1 --subnet=192.168.49.0/24 --gateway=192.168.49.1
 echo "Created cube1 network with bridge: cube1-net"
@@ -22,8 +23,7 @@ fi
 echo "Configuring hosts..."
 scripts/hostsfix.sh $1
 
-
 echo "Fixing pod-number limitations"
-sudo sysctl fs.inotify.max_user_watches=655360
+sudo sysctl fs.inotify.max_user_watches=655360 
 sudo sysctl fs.inotify.max_user_instances=1280
 
