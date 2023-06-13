@@ -5,10 +5,10 @@ echo "-------------------------"
 echo " "
 
 echo "[1/3] Starting second minikube cluster cube2..."
-minikube start --mount-string=/home/admar/first/app2-code:/host2 --mount \
+minikube start --mount-string=/home/admar/first/app2-code:/host --mount \
     --service-cluster-ip-range='10.112.0.0/12' \
     --apiserver-ips 192.168.58.2 \
-    --cpus 2 --memory 6000 \
+    --cpus 4 --memory 7600 \
     --profile cube2 
 
 #kubectl create namespace mainzone --context='cube2'

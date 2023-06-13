@@ -94,49 +94,6 @@ spec:
       - operation:
           paths: ["/oauth2/*", "/sockjs-node/*"]
 ---
-apiVersion: security.istio.io/v1beta1
-kind: AuthorizationPolicy
-metadata:
-  name: "in-db"
-  namespace: appspace
-spec:
-  selector:
-    matchLabels:
-      app: api-db
-  action: ALLOW
-  rules:
-  - from:
-    - source:
-        principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account"]
-    to:
-    - operation:
-        paths: ["/topics"]
-        methods: ["GET", "POST"]
-    - operation:
-        paths: ["/debug"]
----
-apiVersion: security.istio.io/v1beta1
-kind: AuthorizationPolicy
-metadata:
-  name: require-jwt-db
-  namespace: appspace
-spec:
-  selector:
-    matchLabels:
-      app: api-db
-  action: ALLOW
-  rules:
-  - from:
-    - source:
-        principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account"]
-    to:
-    - operation:
-        paths: ["/topics/*"]
-        methods: ["DELETE"]
-    when:
-    - key: request.auth.claims[resource_access][appclient][roles]
-      values: ["PRIME"]
----
 apiVersion: "security.istio.io/v1beta1"
 kind: "AuthorizationPolicy"
 metadata:

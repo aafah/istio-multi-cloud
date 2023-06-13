@@ -3,7 +3,6 @@ kind: Service
 metadata:
   name: keycloak-service
   labels:
-    app: keycloak-service
     svc: keycloak
 spec:
   ports:
@@ -12,7 +11,29 @@ spec:
   selector:
     app: keycloak
   type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak-service
+  labels:
+    svc: keycloak2
+spec:
+  ports:
+  - name: http-keycloak
+    port: 8080
+  selector:
+    app: keycloak
   #externalTrafficPolicy: Local
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kcloak-acc
+  labels:
+    account: kcloak
+    svc: keycloak2
+    svc: keycloak
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -79,3 +100,4 @@ spec:
           httpGet:
             path: /auth/realms/master
             port: 8080
+          initialDelaySeconds: 90

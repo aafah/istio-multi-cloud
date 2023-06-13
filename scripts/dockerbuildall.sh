@@ -14,7 +14,7 @@ docker build -t probe-image app-code/probejs/
 update_progress 20
 docker build -t microtwo-image app-code/microtwo/
 update_progress 40
-docker build -t microdb-image app-code/microdb/
+docker build -t microusr-image app-code/microusr/
 update_progress 60
 docker build -t react-image app-code/exapp/
 update_progress 100

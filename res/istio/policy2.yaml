@@ -6,4 +6,12 @@ metadata:
 spec:
   mtls:
     mode: STRICT
-
+---
+#Policy that by defaults denies all access
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: "deny-all"
+  namespace: appspace
+spec: 
+  {}

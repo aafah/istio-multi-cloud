@@ -1,14 +1,7 @@
 # Check the number of arguments
-if [[ $# -lt 1 || $# -gt 5 ]]; then
+if [[ $# -lt 1 || $# -gt 4 ]]; then
   echo "Usage: $0 <IP address> [flags]"
   exit 1
-fi
-
-# Check if the --multi flag is passed
-if [[ " $* " == *" --multi "* ]]; then
-  MULTI=1
-else
-  MULTI=0
 fi
 
 # Set the IP address
@@ -16,13 +9,14 @@ MY_SERVICE_IP=$1
 SECONDS=0
 
 # Create Networks
-scripts/networksetup.sh $MULTI 
+scripts/networksetup.sh
 
 echo " "
 echo "------------------------"
 echo "CERTIFICATE AND CA SETUP"
 echo "------------------------"
 echo " "
+
 # Creates certificates using a custom CA instead of Istio's
 # Necessary to have both cluster's certificates belong to the same root
 echo "Setting up certificates..."
@@ -44,7 +38,7 @@ echo "[1/3] Starting minikube..."
 minikube start --mount-string=/home/admar/first/app-code:/host --mount \
   --service-cluster-ip-range='10.96.0.0/12' \
   --apiserver-ips 192.168.49.2 \
-  --cpus 2 --memory 7000 \
+  --cpus 4 --memory 6000 \
   --profile cube1
 
 #--apiserver-ips $MY_SERVICE_IP\
@@ -76,39 +70,43 @@ istioctl install -y \
 ELAPSED="Infrastructure configured! Elapsed: $(($SECONDS / 3600))hrs $((($SECONDS / 60) % 60))min $(($SECONDS % 60))sec"
 echo $ELAPSED
 
-# Check for multi-cloud installation
-if [[ "$MULTI" -eq 1 ]]; then
-  #Sets up Required resources for multicluster purposes
-  scripts/multicluster.sh
-  sleep 10
-  echo "First Cluster now up and running..."
+#Sets up Required resources for multicluster purposes
+scripts/multicluster.sh
+sleep 10
+echo "First Cluster now up and running..."
 
-  #Start up and configure Istio on Remote Cluster
-  scripts/remotecluster.sh
-  # Check if the --test flag is passed
-  if [[ " $* " == *" --test "* ]]; then
-    #Tests connectivity between clusters
-    scripts/verify.sh --init
-  else
-    echo "Skipping test phase. Run clusterinit.sh with --test to verify connectivity"
-  fi
-else
-    echo "Skipping multicloud installation. Run cluster with --multi for that purpose"
-fi
+#Start up and configure Istio on Remote Cluster
+scripts/remotecluster.sh
 
 # Check if the --app flag is passed
 if [[ " $* " == *" --app "* ]]; then 
   echo "Mounting application, please wait..."
-  scripts/appmount.sh $MULTI
+  scripts/appmount.sh 
 else
   echo "Skipping app mounting phase. Run clusterinit.sh with --app to mount the application"
 fi
 
 if [[ " $* " == *" --kiali "* ]]; then
-  scripts/observe.sh $MULTI
+  scripts/observe.sh
+fi
+
+# Check if the --test flag is passed
+if [[ " $* " == *" --test "* ]]; then
+  #Tests connectivity between clusters
+  scripts/verify.sh --init
+else
+  echo "Skipping test phase. Run clusterinit.sh with --test to verify connectivity"
 fi
 
 TOTELA="Finish! Total Time: $(($SECONDS / 3600))hrs $((($SECONDS / 60) % 60))min $(($SECONDS % 60))sec"
 echo $TOTELA
 echo " "
+if [[ " $* " == *" --app "* ]]; then
+  echo "App reachable at $MY_SERVICE_IP"
+  echo "Keycloak console reachable at $MY_SERVICE_IP/auth"
+fi
+if [[ " $* " == *" --kiali "* ]]; then
+  echo "Kiali console reachable at $MY_SERVICE_IP/kiali1"
+  echo "Kiali console reachable at $MY_SERVICE_IP/kiali2"
+fi
 echo " "
