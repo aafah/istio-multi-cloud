@@ -10,10 +10,10 @@ function Topic({ item, dirt, setDirt, prime }) {
     const deleteTopic = async (id) => {
         try {
             await API.deleteTopic(id)
-            console.log(`Deleted ${id}`)
+            console.log(`Deleted item ${id}`)
             setDirt(true)
         } catch (err) {
-            console.log(`Error: ${err}`)
+            console.log(`Error deleteing item: ${err}`)
         }
     }
 
@@ -48,14 +48,14 @@ function Topic({ item, dirt, setDirt, prime }) {
                                 onClick={revExt}
                             >{extended ? '-' : '+'}</Badge>
                         </Col>
-                        {prime && <Col xs="auto" className="align-items-center px-1"></Col>}
-                        {prime && <Col xs="auto" className="align-items-center px-0">
+                        <Col xs="auto" className="align-items-center px-1"></Col>
+                        <Col xs="auto" className="align-items-center px-0">
                             <Badge
-                                bg='danger'
+                                bg={prime?'danger':'secondary'}
                                 className='pt-1 btn custom-btn'
                                 onClick={() => { deleteTopic(item.id) }}
                             >X</Badge>
-                        </Col>}
+                        </Col>
                     </Row>
                 </Col>
             </Row>

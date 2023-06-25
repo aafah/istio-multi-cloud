@@ -56,7 +56,7 @@ app.get('/debug', (req, res) => {
     if (token) {
         const decodedToken = jwt.decode(token, { complete: true });
         par = JSON.stringify(decodedToken)
-    }
+    }else par = JSON.stringify("Hi. No token in request")
 
     res.status(200).json(par)
 })

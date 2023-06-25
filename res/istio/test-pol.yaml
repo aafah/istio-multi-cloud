@@ -1,0 +1,20 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: "in-db-test"
+  namespace: appspace
+spec:
+  selector:
+    matchLabels:
+      app: api-db
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/appspace/sa/probe-acc"]
+    to:
+    - operation:
+        paths: ["/topics"]
+        methods: ["GET", "POST", "DELETE"]
+    - operation:
+        paths: ["/debug"]

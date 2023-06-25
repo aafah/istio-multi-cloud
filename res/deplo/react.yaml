@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
       - name: react-fend
-        image: aafah/react-image
-        imagePullPolicy: IfNotPresent
+        image: react-image
+        imagePullPolicy: Never
         ports:
         - containerPort: 3000
 --- 

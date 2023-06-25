@@ -87,7 +87,7 @@ else
 fi
 
 if [[ " $* " == *" --kiali "* ]]; then
-  scripts/observe.sh
+  scripts/observe.sh 1
 fi
 
 # Check if the --test flag is passed
@@ -106,7 +106,6 @@ if [[ " $* " == *" --app "* ]]; then
   echo "Keycloak console reachable at $MY_SERVICE_IP/auth"
 fi
 if [[ " $* " == *" --kiali "* ]]; then
-  echo "Kiali console reachable at $MY_SERVICE_IP/kiali1"
-  echo "Kiali console reachable at $MY_SERVICE_IP/kiali2"
+  echo "Kiali console reachable at $MY_SERVICE_IP/kiali"
 fi
 echo " "

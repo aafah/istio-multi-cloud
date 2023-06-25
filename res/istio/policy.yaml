@@ -3,7 +3,7 @@ apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
   name: "deny-all"
-  namespace: istio-system
+  namespace: appspace
 spec: 
   {}
 ---
@@ -143,22 +143,3 @@ spec:
       istio: eastwestgateway
   rules: 
     - {}
----
-apiVersion: security.istio.io/v1beta1
-kind: AuthorizationPolicy
-metadata:
-  name: "sleep-hello"
-  namespace: sample
-spec:
-  selector:
-    matchLabels:
-      app: helloworld
-  action: ALLOW
-  rules:
-  - from:
-    - source:
-        principals: ["cluster.local/ns/sample/sa/sleep"]
-    to:
-    - operation:
-        paths: ["/hello"]
-        methods: ["GET"]
