@@ -41,8 +41,6 @@ minikube start --mount-string=/home/admar/first/app-code:/host --mount \
   --cpus 4 --memory 6000 \
   --profile cube1
 
-#--apiserver-ips $MY_SERVICE_IP\
-
 kubectl create namespace istio-system --context='cube1'
 kubectl --context='cube1' create secret generic cacerts -n istio-system \
       --from-file=cert/cluster1/ca-cert.pem \
