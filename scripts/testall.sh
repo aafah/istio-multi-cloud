@@ -38,15 +38,17 @@ echo "probe.default.cube1 -> micro-two.appspace.cube1"
 echo "-----------------------------------------------"
 kubectl --context='cube1' -n default \
     exec $PROBE_DEF -- \
-    curl api-two-service.appspace.svc.cluster.local:3002/updates/57aaed08
+    curl api-two-service.appspace.svc.cluster.local:3002/updates/7d796226
 echo " "
 
-echo "-----------------------------------------------"
+echo "------------------------------------------------"
 echo "probe.appspace.cube1 -> micro-two.appspace.cube1"
-echo "-----------------------------------------------"
+echo "------------------------------------------------"
 kubectl --context='cube1' -n appspace \
-    exec $PROBE_APP -- \
-    curl api-two-service.appspace.svc.cluster.local:3002/updates/57aaed08 
+    exec $PROBE_APP -- sh -c \
+    "wget -qO- \
+    api-two-service.appspace.svc.cluster.local:3002/updates/7d796226 \
+    | jq -C"
 echo " "
 
 echo "----------------------------------------------"
@@ -66,37 +68,22 @@ kubectl --context='cube1' -n appspace \
      curl api-db-service.appspace.svc.cluster.local:3003/debug
 echo " "
 
-
-#echo "-----------------------------------------------------------"
-#echo "probe.appspace.cube1 -> microdb.appspace.cube2  [JWTRules] "
-#echo "-----------------------------------------------------------"
-
+#echo "-----------------Tracing Route----------------"
 #kubectl --context='cube1' -n appspace \
 #     exec $PROBE_APP -- \
-#     curl -X DELETE api-db-service.appspace.svc.cluster.local:3003/topics/blabla
-#echo " "
+#     traceroute api-db-service.appspace.svc.cluster.local:3003
 
-#echo "Getting Valid JWT from Keycloak..."
-#while [[ $(kubectl get pods -n authzone $PROBE_APP2 --context='cube2' -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do
-#    sleep 3
-#done
-#TOKEN= $(kubectl --context='cube2' -n authzone exec $PROBE_APP2 -- /bin/sh -c 'curl -d 'client_id=appclient' -d 'username=user-one' -d 'password=password' -d 'grant_type=password' 'http://keycloak-service.authzone.svc.cluster.local:8080/auth/realms/appcloak/protocol/openid-connect/token'') #| jq ".access_token"
 
-#echo ""
-#echo "-------------------------------"
-#echo "$TOKEN"
-#echo "-------------------------------"
-
-#echo "Trying using token..."
-
+#echo "-----------------------------------------------------------"
+#echo "probe.appspace.cube1 -> keycloak.authspace.cube2  [JWT req] "
+#echo "-----------------------------------------------------------"
 #kubectl --context='cube1' -n appspace \
-#     exec $PROBE_APP -- \
-#     curl -X DELETE \
-#     --header "Authorization: Bearer $TOKEN"\
-#     -s api-db-service.appspace.svc.cluster.local:3003/topics/blabla
-#echo " "
-#'
-kubectl delete -f res/istio/test-pol.yaml --context='cube2'
+#     exec $PROBE_APP -- sh -c \
+#     "curl \
+#     -d 'client_id=appclient' -d 'username=user-one' -d 'password=password' \
+#     -d 'grant_type=password' \
+#     'http://keycloak-service.authzone.svc.cluster.local:8080/auth/realms/appcloak/protocol/openid-connect/token'"
+
 
 echo "----------------------------------"
 echo "          Testing done"
