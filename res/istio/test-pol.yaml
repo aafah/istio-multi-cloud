@@ -14,7 +14,4 @@ spec:
         principals: ["cluster.local/ns/appspace/sa/probe-acc"]
     to:
     - operation:
-        paths: ["/topics"]
-        methods: ["GET", "POST", "DELETE"]
-    - operation:
-        paths: ["/debug"]
+        methods: ["GET"]
