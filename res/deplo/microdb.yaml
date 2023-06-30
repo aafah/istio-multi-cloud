@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-db-service
+  labels:
+    svc: api-db
+spec:
+  selector:
+    app: api-db
+  ports:
+    - name: http-db
+      port: 3003
+      targetPort: 3003
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: db-acc
+  labels:
+    account: microdb
+    svc: api-db
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-db-deplo
+  labels:
+    app: api-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-db
+  template:
+    metadata:
+      labels:
+        app: api-db
+    spec:
+      serviceAccountName: db-acc
+      containers:
+      - name: api-db
+        image: microdb-image
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3003
+        volumeMounts:
+        - name: db-data
+          mountPath: /app/db/microdb.db
+      volumes:
+      - name: db-data
+        hostPath:
+          path: /host/microdb/db/microdb.db 
+          type: File
+# minikube mount $HOME:/host is necessary
+# or minikube start --mount-string="$HOME:/host" --mount
