@@ -1,4 +1,3 @@
-# Array of pod tags and corresponding endpoints
 # Function to test the connection
 test_connection() {
     source_pod=$1
@@ -8,7 +7,7 @@ test_connection() {
     
     echo "Testing $method connection from ${source_pod:0:7}... to ${endpoint:0:7}..."
     
-    # Perform GET request and check response status
+    # Perform request and check response status
     response=$(kubectl exec -n appspace --context=$context $source_pod -- curl -s -o /dev/null -w "%{http_code}" \
         -X $method http://$endpoint)
     
@@ -30,17 +29,17 @@ svc_endpoints_get=(
   "react-service.appspace.svc.cluster.local:3000/"
 )
 
-# Iterate over each pod
+# Iterate over each pod cube1
 for source_pod in $pods; do
-    # Iterate over each service
+    # Iterate over each endpoint
     for endpoint in "${svc_endpoints_get[@]}"; do
         test_connection $source_pod $endpoint 'cube1' 'GET'
     done
 done
 
-# Iterate over each pod
+# Iterate over each pod cub2
 for source_pod in $pods2; do
-    # Iterate over each service
+    # Iterate over each endpoint
     for endpoint in "${svc_endpoints_get[@]}"; do
         test_connection $source_pod $endpoint 'cube2' 'GET'
     done

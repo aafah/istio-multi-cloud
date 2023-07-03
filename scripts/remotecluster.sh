@@ -11,9 +11,6 @@ minikube start --mount-string=/home/admar/first/app2-code:/host --mount \
     --cpus 4 --memory 7600 \
     --profile cube2 
 
-#kubectl create namespace mainzone --context='cube2'
-#kubectl label namespace mainzone istio-injection=enabled --context='cube2'
-
 minikube addons enable metallb --profile='cube2'
 kubectl apply -f res/metal2.yaml --context='cube2'
 
@@ -26,7 +23,6 @@ kubectl --context='cube2' create secret generic cacerts -n istio-system \
       --from-file=cert/cluster2/root-cert.pem \
       --from-file=cert/cluster2/cert-chain.pem
 
-#kubectl annotate namespace istio-system topology.istio.io/controlPlaneClusters=cluster1 --context='cube2'
 kubectl --context='cube2' label namespace istio-system topology.istio.io/network=network2
 
 # Install Istio
